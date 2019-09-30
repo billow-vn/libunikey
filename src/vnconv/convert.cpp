@@ -213,8 +213,6 @@ end:
 //---------------------------------------
 int vnFileStreamConvert(int inCharset, int outCharset, FILE * inf, FILE *outf)
 {
-	int ret = 0;
-
 	VnCharset *pInCharset = VnCharsetLibObj.getVnCharset(inCharset);
 	VnCharset *pOutCharset = VnCharsetLibObj.getVnCharset(outCharset);
 

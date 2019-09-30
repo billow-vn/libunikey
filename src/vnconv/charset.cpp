@@ -76,7 +76,7 @@ int VnInternalCharset::elementSize()
 }
 
 //-------------------------------------------
-SingleByteCharset::SingleByteCharset(unsigned char * vnChars)
+SingleByteCharset::SingleByteCharset(UKWORD * vnChars)
 {
 	int i;
 	m_vnChars = vnChars;
