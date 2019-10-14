@@ -21,10 +21,94 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 --------------------------------------------------------------------------------*/
 
-#ifndef __UNIKEY_H
-#define __UNIKEY_H
+#if !defined(HAVE_SUITABLE_QT_VERSION)
+/* Try to check Qt version, should be more or equal than 5.3.0 */
+    #if defined(QT_VERSION) && defined(QT_VERSION_CHECK)
+        #if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
+            #define HAVE_SUITABLE_QT_VERSION 1
+        #endif
+    #endif /* End check Qt version */
+#endif /* End check exestance of Qt suitable version */
 
-#include "keycons.h"
+
+#if !defined(__RE_OS_WINDOWS__) && !defined(__RE_OS_ANDROID__)
+/* OS not selected, try detect OS */
+    #if (defined(WIN32) || defined(_WIN32) || defined(WIN32_LEAN_AND_MEAN) || defined(_WIN64) || defined(WIN64))
+        #define __RE_OS_WINDOWS__ 1
+        #ifndef WIN32_LEAN_AND_MEAN
+/* Exclude rarely-used stuff from Windows headers */
+            #define WIN32_LEAN_AND_MEAN
+        #endif /* WIN32_LEAN_AND_MEAN */
+
+        #if !defined(__RE_COMPILER_MINGW__)
+            #if defined(__MINGW32__) || defined(__MINGW64__) || defined(MINGW)
+                #define __RE_COMPILER_MINGW__ 1
+            #endif
+        #endif
+    #endif /* END CHECKING WINDOWS PLATFORM  */
+/***********************************************************************************/
+    #if defined(ANDROID_NDK) || defined(__ANDROID__) || defined(ANDROID)
+        #define __RE_OS_ANDROID__ 1
+    #endif /* END CHECKING ANDROID PLATFORM */
+/***********************************************************************************/
+#endif /* END DETECT OS */
+
+#if defined(TARGET_OS_MAC) || defined(TARGET_OS_IPHONE) || defined(TARGET_IPHONE_SIMULATOR) || defined(__APPLE__)
+    #ifndef __APPLE__
+        #define __APPLE__ 1
+    #endif
+#endif
+
+
+#if defined(__cplusplus) || defined(_cplusplus)
+    #define __RE_EXTERN__ extern "C"
+#else
+    #define __RE_EXTERN__ extern
+#endif
+
+
+#if defined(__RE_OS_WINDOWS__) && !defined(HAVE_SUITABLE_QT_VERSION) && !defined(BKL_XUNIKEY_STATIC)
+    #include <windows.h>
+
+    #if defined(CMAKE_BUILD) || defined(__BUILDING_RECORE_DYNAMIC_LIBRARY__)
+        #	if defined(_MSC_VER) || defined(__RE_COMPILER_MINGW__)
+            #		define __RE_PUBLIC_CLASS_API__ __declspec(dllexport)
+            #		define __RE_EXPORT__ __RE_EXTERN__ __declspec(dllexport)
+        #	elif defined(__GNUC__)
+            #		define __RE_PUBLIC_CLASS_API__ __attribute__((dllexport))
+            #		define __RE_EXPORT__ __RE_EXTERN__ __attribute__((dllexport))
+        #	endif
+    #else
+        #	if defined(_MSC_VER) || defined(__RE_COMPILER_MINGW__)
+            #		define __RE_PUBLIC_CLASS_API__ __declspec(dllimport)
+            #		define __RE_EXPORT__ __RE_EXTERN__ __declspec(dllimport)
+        #	elif defined(__GNUC__)
+            #		define __RE_PUBLIC_CLASS_API__ __attribute__((dllimport))
+            #		define __RE_EXPORT__ __RE_EXTERN__ __attribute__((dllimport))
+        #	endif
+    #endif
+#endif /* __RE_OS_WINDOWS__ */
+
+#if defined(__GNUC__)
+    #	if __GNUC__ >= 4
+        #		if !defined(__RE_PUBLIC_CLASS_API__)
+            #			define __RE_PUBLIC_CLASS_API__ __attribute__ ((visibility("default")))
+        #		endif
+    #	endif
+#endif
+
+#ifndef __RE_EXPORT__
+    #define __RE_EXPORT__ __RE_EXTERN__
+#endif
+
+#ifndef __RE_PUBLIC_CLASS_API__
+    #define __RE_PUBLIC_CLASS_API__
+#endif
+
+#ifndef __UNIKEY_H
+    #define __UNIKEY_H
+
+    #include "keycons.h"
 
 /*----------------------------------------------------
 Initialization steps:
@@ -60,57 +144,51 @@ Clean up:
 - When the Engine is no longer needed, call UnikeyCleanup
 ------------------------------------------------------*/
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-    extern unsigned char UnikeyBuf[];
-    extern int UnikeyBackspaces;
-    extern int UnikeyBufChars;
-    extern UkOutputType UnikeyOutput;
+__RE_EXPORT__ unsigned char UnikeyBuf[];
+__RE_EXPORT__ int UnikeyBackspaces;
+__RE_EXPORT__ int UnikeyBufChars;
+__RE_EXPORT__ UkOutputType UnikeyOutput;
 
-  void UnikeySetup(); // always call this first
-  void UnikeyCleanup(); // call this when unloading unikey module
-  
-  // call this to reset Unikey's state when focus, context is changed or
-  // some control key is pressed
-  void UnikeyResetBuf(); 
+__RE_EXPORT__ void UnikeySetup(); // always call this first
+__RE_EXPORT__ void UnikeyCleanup(); // call this when unloading unikey module
 
- // main handler, call every time a character input is received
-  void UnikeyFilter(unsigned int ch);
-  void UnikeyPutChar(unsigned int ch); // put new char without filtering
+// call this to reset Unikey's state when focus, context is changed or
+// some control key is pressed
+__RE_EXPORT__ void UnikeyResetBuf();
 
-  // call this before UnikeyFilter for correctly processing some TELEX shortcuts
-  void UnikeySetCapsState(int shiftPressed, int CapsLockOn);
+// main handler, call every time a character input is received
+__RE_EXPORT__ void UnikeyFilter(unsigned int ch);
+__RE_EXPORT__ void UnikeyPutChar(unsigned int ch); // put new char without filtering
 
- // call this when backspace is pressed
-  void UnikeyBackspacePress();
+// call this before UnikeyFilter for correctly processing some TELEX shortcuts
+__RE_EXPORT__ void UnikeySetCapsState(int shiftPressed, int CapsLockOn);
 
-  // call this to restore to original key strokes
-  void UnikeyRestoreKeyStrokes();
+// call this when backspace is pressed
+__RE_EXPORT__ void UnikeyBackspacePress();
 
- //set extra options
-  void UnikeySetOptions(UnikeyOptions *pOpt); 
-  void CreateDefaultUnikeyOptions(UnikeyOptions *pOpt);
+// call this to restore to original key strokes
+__RE_EXPORT__ void UnikeyRestoreKeyStrokes();
 
-  void UnikeyGetOptions(UnikeyOptions *pOpt);
+//set extra options
+__RE_EXPORT__ void UnikeySetOptions(UnikeyOptions *pOpt);
+__RE_EXPORT__ void CreateDefaultUnikeyOptions(UnikeyOptions *pOpt);
 
-  // set input method
-  //   im: TELEX_INPUT, VNI_INPUT, VIQR_INPUT, VIQR_STAR_INPUT
-  void UnikeySetInputMethod(UkInputMethod im);
-  // set output format
-  //  void UnikeySetOutputVIQR();
-  // void UnikeySetOutputUTF8();
-  int UnikeySetOutputCharset(int charset);
+__RE_EXPORT__ void UnikeyGetOptions(UnikeyOptions *pOpt);
 
-  int UnikeyLoadMacroTable(const char *fileName);
-  int UnikeyLoadUserKeyMap(const char *fileName);
+// set input method
+//   im: TELEX_INPUT, VNI_INPUT, VIQR_INPUT, VIQR_STAR_INPUT
+__RE_EXPORT__ void UnikeySetInputMethod(UkInputMethod im);
+// set output format
+//  void UnikeySetOutputVIQR();
+// void UnikeySetOutputUTF8();
+__RE_EXPORT__ int UnikeySetOutputCharset(int charset);
 
-  //call this to enable typing vietnamese even in a non-vn sequence
-  //e.g: GD&DDT,QDDND...
-  //The engine will return to normal mode when a word-break occurs.
-  void UnikeySetSingleMode();
-#if defined(__cplusplus)
-}
-#endif
+__RE_EXPORT__ int UnikeyLoadMacroTable(const char *fileName);
+__RE_EXPORT__ int UnikeyLoadUserKeyMap(const char *fileName);
+
+//call this to enable typing vietnamese even in a non-vn sequence
+//e.g: GD&DDT,QDDND...
+//The engine will return to normal mode when a word-break occurs.
+__RE_EXPORT__ void UnikeySetSingleMode();
 
 #endif

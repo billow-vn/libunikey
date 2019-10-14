@@ -34,25 +34,48 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define CP_US_ANSI 1252
 
-typedef enum {UkTelex, UkVni, UkViqr, UkMsVi, UkUsrIM, UkSimpleTelex} UkInputMethod;
+typedef struct {
+    int from;
+    int to;
+} SyncMap;
+
+typedef enum {
+    UkNone,
+    UkOff,
+    UkTelex,
+    UkVni,
+    UkViqr,
+    UkMsVi,
+    UkUsrIM,
+    UkSimpleTelex
+} UkInputMethod;
+
+typedef enum {
+    VKM_NAN,
+    VKM_OFF,
+    VKM_VNI,
+    VKM_TELEX,
+    VKM_VIQR,
+    VKM_USER
+} VkInputMethod;
+
 typedef struct _UnikeyOptions UnikeyOptions;
 
-struct _UnikeyOptions
-{
-  int freeMarking;
-  int modernStyle;
-  int macroEnabled;
-  int useUnicodeClipboard;
-  int alwaysMacro;
-  int strictSpellCheck;
-  int useIME; //for Win32 only
-  int spellCheckEnabled;
-  int autoNonVnRestore;
+struct _UnikeyOptions {
+    int freeMarking;
+    int modernStyle;
+    int macroEnabled;
+    int useUnicodeClipboard;
+    int alwaysMacro;
+    int strictSpellCheck;
+    int useIME; //for Win32 only
+    int spellCheckEnabled;
+    int autoNonVnRestore;
 };
 
 #define UKOPT_FLAG_ALL                   0xFFFFFFFF
 #define UKOPT_FLAG_FREE_STYLE            0x00000001
-//#define UKOPT_FLAG_MANUAL_TONE           0x00000002
+#define UKOPT_FLAG_MANUAL_TONE           0x00000002
 #define UKOPT_FLAG_MODERN                0x00000004
 #define UKOPT_FLAG_MACRO_ENABLED         0x00000008
 #define UKOPT_FLAG_USE_CLIPBOARD         0x00000010
@@ -75,6 +98,22 @@ struct _UnikeySysInfo
 };
 #endif
 
-typedef enum {UkCharOutput, UkKeyOutput} UkOutputType;
+typedef enum {
+    UkCharOutput, UkKeyOutput
+} UkOutputType;
+
+static int SyncTranslate(int from, SyncMap *list, int count, int fallback) {
+    int i;
+
+    for (i = 0; i < count && list[i].from != from; i++) {
+        continue;
+    }
+
+    if (i == count) {
+        return fallback;
+    }
+
+    return list[i].to;
+}
 
 #endif

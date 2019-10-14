@@ -67,11 +67,16 @@ All options are set through configuration file or keyboard shortcuts.
     # library.
     s.header_dir = s.name
 
-    # s.source_files = "src/ukinterface/**/*.{h,hpp,c,cc,cpp}"
+    s.source_files = [
+        "src/objc/*.{h,mm}",
+    ]
+
     # s.exclude_files = "Classes/Exclude"
-    # s.public_header_files = "src/ukinterface/**/*.h"
-    # s.header_mappings_dir = 'src/{byteio,vnconv,ukengine,ukinterface}'
-    # s.header_mappings_dir = '.'
+    s.public_header_files = [
+        "src/objc/*.h",
+    ]
+
+    s.header_mappings_dir = 'src/objc'
 
     # s.vendored_libraries = 'libUniversalRelease.a'
 
@@ -87,14 +92,14 @@ All options are set through configuration file or keyboard shortcuts.
     # s.framework = 'CoreFoundation'
     # s.framework  = "SomeFramework"
     # s.frameworks = "SomeFramework", "AnotherFramework"
-    s.libraries = 'stdc++'
+    s.libraries = 'c++'
     s.pod_target_xcconfig = {
         "HEADER_SEARCH_PATHS" => [
             "$(inherited)",
             "#{dir}/src/byteio",
+            "#{dir}/src/vnconv",
             "#{dir}/src/ukengine",
             "#{dir}/src/ukinterface",
-            "#{dir}/src/vnconv"
         ],
     }
 
@@ -102,18 +107,18 @@ All options are set through configuration file or keyboard shortcuts.
         "HEADER_SEARCH_PATHS" => [
             "$(inherited)",
             "#{dir}/src/byteio",
+            "#{dir}/src/vnconv",
             "#{dir}/src/ukengine",
             "#{dir}/src/ukinterface",
-            "#{dir}/src/vnconv"
         ],
 
         # If we don't set these two settings, `include/grpc/support/time.h` and
         # `src/core/lib/support/string.h` shadow the system `<time.h>` and `<string.h>`, breaking the
         # build.
-        # 'USE_HEADERMAP' => 'NO',
-        # 'ALWAYS_SEARCH_USER_PATHS' => 'NO',
+        'USE_HEADERMAP' => 'NO',
+        'ALWAYS_SEARCH_USER_PATHS' => 'NO',
         # 'ENABLE_BITCODE' => 'NO',
-        # 'OTHER_LDFLAGS' => "-ObjC -all_load -lz -lstdc++",
+        # 'OTHER_LDFLAGS' => "-ObjC -all_load -lz -lc++",
         # 'VALID_ARCHS' => 'x86_64 arm64'
         'VALID_ARCHS' => 'x86_64'
     }
@@ -134,23 +139,26 @@ All options are set through configuration file or keyboard shortcuts.
         'ukengine',
         'ukinterface',
     ]
-    # s.default_subspecs = 'byteio', 'vnconv', 'ukengine', 'ukinterface'
+
     s.subspec 'byteio' do |ss|
         ss.requires_arc = false
-        # ss.header_mappings_dir = '.'
+
         ss.header_mappings_dir = 'src/byteio'
-        ss.source_files = "src/byteio/**/*.{h,c,cc,cpp}"
-        ss.private_header_files = "src/byteio/**/*.{h,hpp}"
+        ss.source_files = "src/byteio/*.{h,c,cc,cpp}"
+        ss.private_header_files = "src/byteio/*.{h,hpp}"
     end
 
     s.subspec 'vnconv' do |ss|
         ss.requires_arc = false
         ss.dependency "#{s.name}/byteio", version
 
-        # ss.header_mappings_dir = '.'
         ss.header_mappings_dir = 'src/vnconv'
-        ss.source_files = "src/vnconv/**/*.{h,hpp,c,cc,cpp}"
-        ss.private_header_files = "src/vnconv/**/*.{h,hpp}"
+        ss.source_files = "src/vnconv/*.{h,hpp,c,cc,cpp}"
+        # ss.private_header_files = "src/vnconv/*.{h,hpp}"
+        ss.public_header_files = [
+            "src/vnconv/{vnconv}.h"
+        ]
+        ss.exclude_files = "src/vnconv/stdafx.{h,hpp,c,cc,cpp}"
     end
 
     s.subspec 'ukengine' do |ss|
@@ -158,10 +166,12 @@ All options are set through configuration file or keyboard shortcuts.
         ss.dependency "#{s.name}/byteio", version
         ss.dependency "#{s.name}/vnconv", version
 
-        # ss.header_mappings_dir = '.'
         ss.header_mappings_dir = 'src/ukengine'
-        ss.source_files = "src/ukengine/**/*.{h,hpp,c,cc,cpp}"
-        ss.private_header_files = "src/ukengine/**/*.{h,hpp}"
+        ss.source_files = "src/ukengine/*.{h,hpp,c,cc,cpp}"
+        # ss.private_header_files = "src/ukengine/{*}.{h,hpp}"
+        ss.public_header_files = [
+            "src/ukengine/{keycons}.h"
+        ]
         ss.exclude_files = "src/ukengine/stdafx.{h,hpp,c,cc,cpp}"
     end
 
@@ -171,9 +181,8 @@ All options are set through configuration file or keyboard shortcuts.
         ss.dependency "#{s.name}/vnconv", version
         ss.dependency "#{s.name}/ukengine", version
 
-        # ss.header_mappings_dir = '.'
         ss.header_mappings_dir = 'src/ukinterface'
-        ss.source_files = "src/ukinterface/**/*.{h,hpp,c,cc,cpp}"
-        ss.private_header_files = "src/ukinterface/**/*.{h,hpp}"
+        ss.source_files = "src/ukinterface/*.{h,hpp,c,cc,cpp}"
+        ss.private_header_files = "src/ukinterface/*.{h,hpp}"
     end
 end
