@@ -6,6 +6,7 @@
 #include "usrkeymap.h"
 
 SyncMap UkToVkMethodList[] = {
+    {UkOff, VKM_OFF},
     {UkTelex, VKM_TELEX},
     {UkVni, VKM_VNI},
     {UkViqr, VKM_VIQR},
@@ -13,7 +14,7 @@ SyncMap UkToVkMethodList[] = {
 };
 
 SyncMap VkToUkMethodList[] = {
-    {VKM_OFF, UkTelex},
+    {VKM_OFF, UkOff},
     {VKM_TELEX, UkTelex},
     {VKM_VNI, UkVni},
     {VKM_VIQR, UkViqr},
@@ -152,6 +153,9 @@ SyncMap VkToUkMethodList[] = {
         _pEngine->reset();
     } else if (im == UkUsrIM && _pSharedMem->usrKeyMapLoaded) {
         _pSharedMem->input.setIM(_pSharedMem->usrKeyMap);
+        _pEngine->reset();
+    } else {
+        _pSharedMem->input.setIM(im);
         _pEngine->reset();
     }
 }

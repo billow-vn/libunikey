@@ -61,7 +61,7 @@ SyncMap UkToSyncMethodList[] ={
 };
 
 SyncMap SyncToUkMethodList[] ={
-  {VKM_OFF, UkTelex},
+  {VKM_OFF, UkOff},
   {VKM_TELEX, UkTelex},
   {VKM_VNI, UkVni},
   {VKM_VIQR, UkViqr},
