@@ -274,7 +274,9 @@ int UkInputProcessor::setIM(UkInputMethod im)
             useBuiltIn(MsViMethodMapping);
             break;
         default:
+            /*
             m_im = UkTelex;
+            */
             useBuiltIn(TelexMethodMapping);
     }
     return 1;

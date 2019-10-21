@@ -43,6 +43,7 @@ SyncMap VkToUkMethodList[] = {
 - (void)setup {
     _backspaces = 0;
     _bufChars = 0;
+    _isSendForward = true;
     _imVk = VKM_OFF;
 
     _pEngine = new UkEngine();
@@ -87,6 +88,10 @@ SyncMap VkToUkMethodList[] = {
     _pEngine->pass(ch);
     _bufChars = 0;
     _backspaces = 0;
+}
+
+- (void)setIsSendForward:(bool)flag {
+    _isSendForward = flag;
 }
 
 - (void)setCapsState:(int)shiftPressed capsLockOn:(int)capsLockOn {

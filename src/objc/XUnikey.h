@@ -22,6 +22,7 @@
 @property(nonatomic, assign) int bufChars;
 @property(nonatomic, assign) int capsLockOn;
 @property(nonatomic, assign) int shiftPressed;
+@property(nonatomic, assign) bool isSendForward;
 @property(nonatomic, assign) UkOutputType outputType;
 @property(nonatomic, assign) VkInputMethod imVk;
 
@@ -40,6 +41,7 @@
 - (void)resetBuf;
 - (void)filter:(uint)ch;
 - (void)putChar:(uint)ch;
+- (void)setIsSendForward:(bool)flag;
 - (void)setCapsState:(int)shiftPressed capsLockOn:(int)capsLockOn;
 - (void)checkKbCase:(int *)pShiftPressed pCapsLockOn:(int *)pCapsLockOn;
 - (void)backspacePress;
