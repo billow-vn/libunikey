@@ -16,6 +16,8 @@
 #ifndef BKL_XUNIKEY_H
     #define BKL_XUNIKEY_H
 
+    typedef void (* CheckKeyboardCaseCb)(int *pShiftPressed, int *pCapslockOn);
+
 @interface XUnikey : NSObject
 @property(nonatomic, assign) unsigned char *buf;
 @property(nonatomic, assign) int backspaces;
@@ -28,7 +30,7 @@
 
 
 - (void)setOptions:(UnikeyOptions *)pOpt;
-- (void)getOptions:(UnikeyOptions *)pOpt;
+- (UnikeyOptions *)getOptions;
 - (void)createDefaultOptions:(UnikeyOptions *)pOpt;
 - (void)setInputMethod:(VkInputMethod)im;
 - (VkInputMethod)getInputMethod;
@@ -43,7 +45,7 @@
 - (void)putChar:(uint)ch;
 - (void)setIsSendForward:(bool)flag;
 - (void)setCapsState:(int)shiftPressed capsLockOn:(int)capsLockOn;
-- (void)checkKbCase:(int *)pShiftPressed pCapsLockOn:(int *)pCapsLockOn;
+- (void)setCheckKbCase:(CheckKeyboardCaseCb)callback;
 - (void)backspacePress;
 - (void)restoreKeyStrokes;
 - (void)setSingleMode;

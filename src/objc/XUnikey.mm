@@ -43,7 +43,7 @@ SyncMap VkToUkMethodList[] = {
 - (void)setup {
     _backspaces = 0;
     _bufChars = 0;
-    _isSendForward = true;
+    _isSendForward = false;
     _imVk = VKM_OFF;
 
     _pEngine = new UkEngine();
@@ -53,16 +53,6 @@ SyncMap VkToUkMethodList[] = {
     _pSharedMem->vietKey = 1;
     _pSharedMem->usrKeyMapLoaded = 0;
     _pEngine->setCtrlInfo(_pSharedMem);
-
-    // void (* _checkKeyboardCaseCb)(^(int *pShiftPressed, int *pCapsLockOn) {
-    //     *pShiftPressed = _shiftPressed;
-    //     *pCapsLockOn = _capsLockOn;
-    // });
-    //
-    // _pEngine->setCheckKbCaseFunc(CheckKeyboardCaseCb(^(int *pShiftPressed, int *pCapsLockOn) {
-    //     *pShiftPressed = _shiftPressed;
-    //     *pCapsLockOn = _capsLockOn;
-    // }));
 
     [self setInputMethod:VKM_TELEX];
     [self setOutputCharset:CONV_CHARSET_XUTF8];
@@ -100,9 +90,8 @@ SyncMap VkToUkMethodList[] = {
     // capsAll = (shiftPressed && !capsLockOn) || (!shiftPressed && capsLockOn);
 }
 
-- (void)checkKbCase:(int *)pShiftPressed pCapsLockOn:(int *)pCapsLockOn {
-    *pShiftPressed = _shiftPressed;
-    *pCapsLockOn = _capsLockOn;
+- (void)setCheckKbCase:(CheckKeyboardCaseCb)callback {
+    _pEngine->setCheckKbCaseFunc(callback);
 }
 
 - (void)backspacePress {
@@ -136,8 +125,8 @@ SyncMap VkToUkMethodList[] = {
     pOpt->autoNonVnRestore = 0;
 }
 
-- (void)getOptions:(UnikeyOptions *)pOpt {
-    *pOpt = _pSharedMem->options;
+- (UnikeyOptions *)getOptions {
+    return &_pSharedMem->options;
 }
 
 - (void)setSingleMode {
