@@ -1179,7 +1179,7 @@ int UkEngine::processTelexW(UkKeyEvent & ev)
     if (m_keyCheckFunc)
         m_keyCheckFunc(&shiftPressed, &capsLockOn);
 
-    if (usedAsMapChar) ư
+    if (usedAsMapChar) {
         ev.evType = vneMapChar;
         ev.vnSym = isupper(ev.keyCode)? vnl_Uh : vnl_uh;
         if (capsLockOn)

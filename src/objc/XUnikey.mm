@@ -1,9 +1,7 @@
 #import "XUnikey.h"
-
-
 #import "ukengine.h"
 #import "charset.h"
-#include "usrkeymap.h"
+#import "usrkeymap.h"
 
 SyncMap UkToVkMethodList[] = {
     {UkOff, VKM_OFF},
@@ -44,7 +42,7 @@ SyncMap VkToUkMethodList[] = {
     _backspaces = 0;
     _bufChars = 0;
     _isSendForward = false;
-    _imVk = VKM_OFF;
+    _imPrev = VKM_OFF;
 
     _pEngine = new UkEngine();
     _pSharedMem = new UkSharedMem();
@@ -59,6 +57,38 @@ SyncMap VkToUkMethodList[] = {
 
     _pSharedMem->initialized = 1;
     [self createDefaultOptions:&_pSharedMem->options];
+}
+
+- (bool)isEnabled {
+    bool flag = (bool) _pSharedMem->vietKey;
+    if (flag) {
+        switch ([self getInputMethod]) {
+            case VKM_VNI:
+            case VKM_TELEX:
+            case VKM_VIQR:
+            case VKM_USER:
+                flag = true;
+                break;
+
+            case VKM_OFF:
+            default:
+                flag = false;
+                break;
+        }
+    }
+
+    return flag;
+}
+
+- (void)setIsEnabled:(int)flag {
+    _pSharedMem->vietKey = (bool) flag;
+}
+
+- (bool)toggleIsEnabled {
+    bool flag = !((bool) _pSharedMem->vietKey);
+    _pSharedMem->vietKey = flag;
+
+    return flag;
 }
 
 - (void)cleanup {
@@ -139,7 +169,7 @@ SyncMap VkToUkMethodList[] = {
     UkInputMethod im = (UkInputMethod) SyncTranslate(vk_im,
         VkToUkMethodList,
         sizeof(VkToUkMethodList) / sizeof(SyncMap),
-        UkNone
+        UkOff
     );
 
     if (im == UkTelex || im == UkVni || im == UkViqr) {
@@ -162,24 +192,16 @@ SyncMap VkToUkMethodList[] = {
     );
 }
 
-- (int)revertInputMethod {
-    if (_imVk != VKM_OFF) {
-        return 0;
-    }
-
-    [self setInputMethodVk:_imVk];
-
-    return 1;
+- (void)revertInputMethod {
+    [self setInputMethodVk:_imPrev];
 }
 
 - (void)setInputMethodVk:(VkInputMethod)im {
-    if (im != VKM_OFF) {
-        _imVk = im;
-    }
+    _imPrev = im;
 }
 
 - (VkInputMethod)getInputMethodVk {
-    return _imVk;
+    return _imPrev;
 }
 
 - (int)setOutputCharset:(int)charset {

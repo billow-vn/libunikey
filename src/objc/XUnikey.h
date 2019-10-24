@@ -26,7 +26,7 @@
 @property(nonatomic, assign) int shiftPressed;
 @property(nonatomic, assign) bool isSendForward;
 @property(nonatomic, assign) UkOutputType outputType;
-@property(nonatomic, assign) VkInputMethod imVk;
+@property(nonatomic, assign) VkInputMethod imPrev;
 
 
 - (void)setOptions:(UnikeyOptions *)pOpt;
@@ -34,11 +34,13 @@
 - (void)createDefaultOptions:(UnikeyOptions *)pOpt;
 - (void)setInputMethod:(VkInputMethod)im;
 - (VkInputMethod)getInputMethod;
-- (int)revertInputMethod;
 - (void)setInputMethodVk:(VkInputMethod)im;
 - (VkInputMethod)getInputMethodVk;
 
 - (void)setup;
+- (bool)isEnabled;
+- (void)setIsEnabled:(int)flag;
+- (bool)toggleIsEnabled;
 - (void)cleanup;
 - (void)resetBuf;
 - (void)filter:(uint)ch;
