@@ -174,8 +174,9 @@ int CMacroTable::loadFromFile(const char *fname)
             addItem(line, CONV_CHARSET_VIQR);
     }
     fclose(f);
-    MacCompareStartMem = m_macroMem;
-    qsort(m_table, m_count, sizeof(MacroDef), macCompare);
+
+    sortData();
+
     // Convert old version
     if (version != UKMACRO_VERSION_UTF8) {
         writeToFile(fname);
@@ -303,6 +304,12 @@ void CMacroTable::resetContent()
 {
   m_occupied = 0;
   m_count = 0;
+}
+
+//---------------------------------------------------------------
+void CMacroTable::sortData() {
+    MacCompareStartMem = m_macroMem;
+    qsort(m_table, m_count, sizeof(MacroDef), macCompare);
 }
 
 //---------------------------------------------------------------

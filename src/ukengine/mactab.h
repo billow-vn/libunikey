@@ -61,6 +61,7 @@ public:
     const StdVnChar *getText(int idx);
     int getCount() { return m_count; }
     void resetContent();
+    void sortData();
     int addItem(const char *item, int charset);
     int addItem(const void *key, const void *text, int charset);
 

@@ -148,9 +148,9 @@ SyncMap VkToUkMethodList[] = {
 - (void)createDefaultOptions:(UnikeyOptions *)pOpt {
     pOpt->freeMarking = 1;
     pOpt->modernStyle = 0;
-    pOpt->macroEnabled = 0;
+    pOpt->macroEnabled = 1;
     pOpt->useUnicodeClipboard = 0;
-    pOpt->alwaysMacro = 0;
+    pOpt->alwaysMacro = 1;
     pOpt->spellCheckEnabled = 1;
     pOpt->autoNonVnRestore = 0;
 }
@@ -216,6 +216,18 @@ SyncMap VkToUkMethodList[] = {
 
 - (int)loadMacroTable:(const char *)fileName {
     return _pSharedMem->macStore.loadFromFile(fileName);
+}
+
+- (void)macroAddItem:(const char *)key text:(const char *)text {
+    _pSharedMem->macStore.addItem(key, text, CONV_CHARSET_UNIUTF8);
+}
+
+- (void)macroResetContent {
+    _pSharedMem->macStore.resetContent();
+}
+
+- (void)macroSortData {
+    _pSharedMem->macStore.sortData();
 }
 
 - (int)loadUserKeyMap:(const char *)fileName {

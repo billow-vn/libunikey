@@ -55,6 +55,11 @@
 - (int)getOutputCharset;
 
 - (int)loadMacroTable:(const char *)fileName;
+
+- (void)macroAddItem:(const char *)key text:(const char *)text;
+- (void)macroResetContent;
+- (void)macroSortData;
+
 - (int)loadUserKeyMap:(const char *)fileName;
 @end
 
