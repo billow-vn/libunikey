@@ -39,6 +39,7 @@ SyncMap VkToUkMethodList[] = {
 }
 
 - (void)setup {
+    SetupUnikeyEngine();
     _backspaces = 0;
     _bufChars = 0;
     _isSendForward = false;
@@ -216,6 +217,10 @@ SyncMap VkToUkMethodList[] = {
 
 - (int)loadMacroTable:(const char *)fileName {
     return _pSharedMem->macStore.loadFromFile(fileName);
+}
+
+- (bool)hasMacroInput {
+    return (bool)_pEngine->hasMacroInput();
 }
 
 - (void)macroAddItem:(const char *)key text:(const char *)text {

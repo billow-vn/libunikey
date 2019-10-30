@@ -2043,6 +2043,7 @@ void UkEngine::prepareBuffer()
 //----------------------------------------------------
 int UkEngine::macroMatch(UkKeyEvent & ev)
 {
+    m_hasMacroInput = false;
     int capsLockOn = 0;
     int shiftPressed = 0;
     if (m_keyCheckFunc)
@@ -2134,7 +2135,13 @@ int UkEngine::macroMatch(UkKeyEvent & ev)
     m_outputWritten = true;
     m_backs = backs;
     *m_pOutSize = outSize;
+    m_hasMacroInput = true;
     return 1;
+}
+
+//----------------------------------------------------
+int UkEngine::hasMacroInput() {
+    return m_hasMacroInput;
 }
 
 //----------------------------------------------------

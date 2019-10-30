@@ -56,6 +56,7 @@
 
 - (int)loadMacroTable:(const char *)fileName;
 
+- (bool)hasMacroInput;
 - (void)macroAddItem:(const char *)key text:(const char *)text;
 - (void)macroResetContent;
 - (void)macroSortData;

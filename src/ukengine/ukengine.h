@@ -97,6 +97,7 @@ public:
     int processMapChar(UkKeyEvent & ev);
     int processTelexW(UkKeyEvent & ev);
     int processEscChar(UkKeyEvent & ev);
+    int hasMacroInput();
 
 protected:
     static bool m_classInit;
@@ -108,6 +109,7 @@ protected:
     int m_bufSize;
     int m_current;
     int m_singleMode;
+    int m_hasMacroInput;
 
     int m_keyBufSize;
     //unsigned int m_keyStrokes[MAX_UK_ENGINE];
