@@ -126,7 +126,7 @@ VowelSeqInfo VSeqList[] = {
     {3, 0, 0, {vnl_i, vnl_e, vnl_u}, {vs_i, vs_ie, vs_ieu}, -1, vs_ieru, -1, vs_nil},
     {3, 1, 0, {vnl_i, vnl_er, vnl_u}, {vs_i, vs_ier, vs_ieru}, 1, vs_nil, -1, vs_nil},
     {3, 1, 0, {vnl_o, vnl_a, vnl_i}, {vs_o, vs_oa, vs_oai}, -1, vs_nil, -1, vs_nil},
-    {3, 1, 0, {vnl_o, vnl_a, vnl_y}, {vs_o, vs_oa, vs_oay}, -1, vs_nil, -1, vs_nil},  
+    {3, 1, 0, {vnl_o, vnl_a, vnl_y}, {vs_o, vs_oa, vs_oay}, -1, vs_nil, -1, vs_nil},
     {3, 1, 0, {vnl_o, vnl_e, vnl_o}, {vs_o, vs_oe, vs_oeo}, -1, vs_nil, -1, vs_nil},
     {3, 0, 0, {vnl_u, vnl_a, vnl_y}, {vs_u, vs_ua, vs_uay}, -1, vs_uary, -1, vs_nil},
     {3, 1, 0, {vnl_u, vnl_ar, vnl_y}, {vs_u, vs_uar, vs_uary}, 1, vs_nil, -1, vs_nil},
@@ -330,7 +330,7 @@ int VCPairCompare(const void *p1, const void *p2)
         return -1;
     if (t1->v > t2->v)
       return 1;
-  
+
     if (t1->c < t2->c)
         return -1;
     if (t1->c > t2->c)
@@ -349,10 +349,10 @@ bool isValidCV(ConSeq c, VowelSeq v)
     if ((c == cs_gi && vInfo.v[0] == vnl_i) ||
         (c == cs_qu && vInfo.v[0] == vnl_u))
         return false; // gi doesn't go with i, qu doesn't go with u
-  
+
     if (c == cs_k) {
         // k can only go with the following vowel sequences
-        static VowelSeq kVseq[] = {vs_e, vs_i, vs_y, vs_er, vs_eo, vs_eu, 
+        static VowelSeq kVseq[] = {vs_e, vs_i, vs_y, vs_er, vs_eo, vs_eu,
                                    vs_eru, vs_ia, vs_ie, vs_ier, vs_ieu, vs_ieru, vs_nil};
         int i;
         for (i=0; kVseq[i] != vs_nil && kVseq[i] != v; i++);
@@ -531,7 +531,7 @@ int UkEngine::processRoof(UkKeyEvent & ev)
     if (newVs == vs_nil) {
         if (VSeqList[vs].roofPos == -1)
             return processAppend(ev); //roof is not applicable
-    
+
         //a roof already exists -> undo roof
         VnLexiName curCh = m_buffer[vStart + VSeqList[vs].roofPos].vnSym;
         if (target != vnl_nonVnChar && curCh != target)
@@ -567,7 +567,7 @@ int UkEngine::processRoof(UkKeyEvent & ev)
         ConSeq c2 = cs_nil;
         if (m_buffer[m_current].c1Offset != -1)
             c1 = m_buffer[m_current-m_buffer[m_current].c1Offset].cseq;
-        
+
         if (m_buffer[m_current].c2Offset != -1)
             c2 = m_buffer[m_current-m_buffer[m_current].c2Offset].cseq;
 
@@ -639,7 +639,7 @@ int UkEngine::processHookWithUO(UkKeyEvent & ev)
     VnLexiName *v;
 
     if (!m_pCtrl->options.freeMarking && m_buffer[m_current].vOffset != 0)
-        return processAppend(ev);    
+        return processAppend(ev);
 
     vEnd = m_current - m_buffer[m_current].vOffset;
     vs = m_buffer[vEnd].vseq;
@@ -666,7 +666,7 @@ int UkEngine::processHookWithUO(UkKeyEvent & ev)
         break;
     case vneHook_o:
         if (v[1] == vnl_o || v[1] == vnl_or) {
-            if (vEnd == m_current && VSeqList[vs].len == 2 && 
+            if (vEnd == m_current && VSeqList[vs].len == 2 &&
                 m_buffer[m_current].form == vnw_cv && m_buffer[m_current-2].cseq == cs_th)
             {
                 // o|o^ -> o+
@@ -704,10 +704,10 @@ int UkEngine::processHookWithUO(UkKeyEvent & ev)
         break;
     default:  //vneHookAll, vneHookUO:
         if (v[0] == vnl_u) {
-            if (v[1] == vnl_o || v[1] == vnl_or) { 
+            if (v[1] == vnl_o || v[1] == vnl_or) {
                 //uo -> uo+ if prefixed by "th"
-                if ((vs == vs_uo || vs == vs_uor) && vEnd == m_current && 
-                    m_buffer[m_current].form == vnw_cv && m_buffer[m_current-2].cseq == cs_th) 
+                if ((vs == vs_uo || vs == vs_uor) && vEnd == m_current &&
+                    m_buffer[m_current].form == vnw_cv && m_buffer[m_current-2].cseq == cs_th)
                 {
                     newVs = vs_uoh;
                     markChange(vStart+1);
@@ -796,8 +796,8 @@ int UkEngine::processHook(UkKeyEvent & ev)
     vs = m_buffer[vEnd].vseq;
 
     v = VSeqList[vs].v;
-  
-    if (VSeqList[vs].len > 1 && 
+
+    if (VSeqList[vs].len > 1 &&
         ev.evType != vneBowl &&
         (v[0] == vnl_u || v[0] == vnl_uh) &&
         (v[1] == vnl_o || v[1] == vnl_oh || v[1] == vnl_or))
@@ -877,7 +877,7 @@ int UkEngine::processHook(UkKeyEvent & ev)
         ConSeq c2 = cs_nil;
         if (m_buffer[m_current].c1Offset != -1)
             c1 = m_buffer[m_current-m_buffer[m_current].c1Offset].cseq;
-        
+
         if (m_buffer[m_current].c2Offset != -1)
             c2 = m_buffer[m_current-m_buffer[m_current].c2Offset].cseq;
 
@@ -893,7 +893,7 @@ int UkEngine::processHook(UkKeyEvent & ev)
         markChange(changePos);
         m_buffer[changePos].vnSym = pInfo->v[pInfo->hookPos];
     }
-   
+
     for (i=0; i < pInfo->len; i++) { //update sub-sequences
         m_buffer[vStart+i].vseq = pInfo->sub[i];
     }
@@ -939,7 +939,7 @@ int UkEngine::getTonePosition(VowelSeq vs, bool terminated)
             return 1;
         return info.hookPos;
     }
-  
+
     if (info.len == 3)
         return 1;
 
@@ -956,7 +956,7 @@ int UkEngine::processTone(UkKeyEvent & ev)
     if (m_current < 0 || !m_pCtrl->vietKey)
         return processAppend(ev);
 
-    if (m_buffer[m_current].form == vnw_c && 
+    if (m_buffer[m_current].form == vnw_c &&
         (m_buffer[m_current].cseq == cs_gi || m_buffer[m_current].cseq == cs_gin)) {
         int p = (m_buffer[m_current].cseq == cs_gi)? m_current : m_current - 1;
         if (m_buffer[p].tone == 0 && ev.tone == 0)
@@ -991,7 +991,7 @@ int UkEngine::processTone(UkKeyEvent & ev)
             (ev.tone == 2 || ev.tone == 3 || ev.tone == 4))
             return processAppend(ev); // c, ch, p, t suffixes don't allow ` ? ~
     }
-      
+
     int toneOffset = getTonePosition(vs, vEnd == m_current);
     int tonePos = vEnd - (info.len -1 ) + toneOffset;
     if (m_buffer[tonePos].tone == 0 && ev.tone == 0)
@@ -1016,12 +1016,12 @@ int UkEngine::processDd(UkKeyEvent & ev)
 {
     if (!m_pCtrl->vietKey || m_current < 0)
         return processAppend(ev);
-    
+
     int pos;
 
     // we want to allow dd even in non-vn sequence, because dd is used a lot in abbreviation
     // we allow dd only if preceding character is not a vowel
-    if (m_buffer[m_current].form == vnw_nonVn && 
+    if (m_buffer[m_current].form == vnw_nonVn &&
         m_buffer[m_current].vnSym == vnl_d &&
         (m_buffer[m_current-1].vnSym == vnl_nonVnChar ||!IsVnVowel[m_buffer[m_current-1].vnSym]))
     {
@@ -1062,7 +1062,7 @@ int UkEngine::processDd(UkKeyEvent & ev)
         m_reverted = true;
         return 1;
     }
-  
+
     return processAppend(ev);
 }
 
@@ -1262,7 +1262,7 @@ int UkEngine::checkEscapeVIQR(UkKeyEvent & ev)
             break;
         }
     }
-  
+
     if (escape) {
         m_current++;
         WordInfo *p = &m_buffer[m_current];
@@ -1293,12 +1293,10 @@ int UkEngine::processAppend(UkKeyEvent & ev)
     int ret = 0;
     switch (ev.chType) {
     case ukcReset:
-#if defined(_WIN32)
         if (ev.keyCode == ENTER_CHAR) {
             if (m_pCtrl->options.macroEnabled && macroMatch(ev))
                 return 1;
         }
-#endif
         reset();
         return 0;
     case ukcWordBreak:
@@ -1363,14 +1361,14 @@ int UkEngine::appendVowel(UkKeyEvent & ev)
         entry.vOffset = 0;
         entry.vseq = lookupVSeq(canSym);
 
-        if (!m_pCtrl->vietKey || 
+        if (!m_pCtrl->vietKey ||
             ((m_pCtrl->charsetId != CONV_CHARSET_UNI_CSTRING) && isalpha(entry.keyCode)) ) {
             return 0;
         }
         markChange(m_current);
         return 1;
     }
-  
+
     WordInfo & prev = m_buffer[m_current-1];
     VowelSeq vs, newVs;
     ConSeq cs;
@@ -1398,7 +1396,7 @@ int UkEngine::appendVowel(UkKeyEvent & ev)
         vs = prev.vseq;
         prevTonePos = (m_current - 1) - (VSeqList[vs].len - 1) + getTonePosition(vs, true);
         tone = m_buffer[prevTonePos].tone;
-    
+
         if (lowerSym != canSym && tone != 0) //new sym has a tone, but there's is already a preceeding tone
             newVs = vs_nil;
         else {
@@ -1421,7 +1419,7 @@ int UkEngine::appendVowel(UkKeyEvent & ev)
             entry.c1Offset = entry.c2Offset = entry.vOffset = -1;
             break;
         }
-    
+
         entry.form = prev.form;
         if (prev.form == vnw_cv)
             entry.c1Offset = prev.c1Offset + 1;
@@ -1431,7 +1429,7 @@ int UkEngine::appendVowel(UkKeyEvent & ev)
         entry.vOffset = 0;
         entry.vseq = newVs;
         entry.tone = 0;
-        
+
         newTone = (lowerSym - canSym)/2;
         if (tone == 0) {
             if (newTone != 0) {
@@ -1485,12 +1483,12 @@ int UkEngine::appendVowel(UkKeyEvent & ev)
             prev.tone = 0;
             return 1;
         }
-    
+
         break;
   }
 
     if (!autoCompleted &&
-        (m_pCtrl->charsetId != CONV_CHARSET_UNI_CSTRING) && 
+        (m_pCtrl->charsetId != CONV_CHARSET_UNI_CSTRING) &&
         isalpha(entry.keyCode)) {
         return 0;
     }
@@ -1630,7 +1628,7 @@ int UkEngine::appendConsonnant(UkKeyEvent & ev)
             newCs = lookupCSeq(CSeqList[cs].c[0], CSeqList[cs].c[1], lowerSym);
         else
             newCs = lookupCSeq(CSeqList[cs].c[0], lowerSym);
-        
+
         if (newCs != cs_nil && (prev.form == vnw_vc || prev.form == vnw_cvc)) {
             // Check CVC combination
             c1 = cs_nil;
@@ -1685,7 +1683,7 @@ int UkEngine::appendConsonnant(UkKeyEvent & ev)
 //----------------------------------------------------------
 int UkEngine::processEscChar(UkKeyEvent & ev)
 {
-    if (m_pCtrl->vietKey && 
+    if (m_pCtrl->vietKey &&
         m_current >=0 && m_buffer[m_current].form != vnw_empty && m_buffer[m_current].form != vnw_nonVn) {
         m_toEscape = true;
     }
@@ -1722,7 +1720,7 @@ int UkEngine::processNoSpellCheck(UkKeyEvent & ev)
     }
 
     if (ev.evType == vneNormal &&
-        ((entry.keyCode >= 'a' && entry.keyCode <= 'z') || 
+        ((entry.keyCode >= 'a' && entry.keyCode <= 'z') ||
          (entry.keyCode >= 'A' && entry.keyCode <= 'Z') ) )
         return 0;
     markChange(m_current);
@@ -1834,7 +1832,7 @@ int UkEngine::writeOutput(unsigned char *outBuf, int & outSize)
         else {
             stdChar = IsoToStdVnChar(m_buffer[i].keyCode);
         }
-    
+
         if (stdChar != INVALID_STD_CHAR)
             ret = pCharset->putChar(os, stdChar, bytesWritten);
     }
@@ -1854,7 +1852,7 @@ int UkEngine::getSeqSteps(int first, int last)
     if (last < first)
         return 0;
 
-    if (m_pCtrl->charsetId == CONV_CHARSET_XUTF8 || 
+    if (m_pCtrl->charsetId == CONV_CHARSET_XUTF8 ||
         m_pCtrl->charsetId == CONV_CHARSET_UNICODE)
         return (last - first +  1);
 
@@ -1876,11 +1874,11 @@ int UkEngine::getSeqSteps(int first, int last)
         else {
             stdChar = m_buffer[i].keyCode;
         }
-    
+
         if (stdChar != INVALID_STD_CHAR)
             pCharset->putChar(os, stdChar, bytesWritten);
     }
-  
+
     int len = os.getOutBytes();
     if (m_pCtrl->charsetId == CONV_CHARSET_UNIDECOMPOSED)
         len = len / 2;
@@ -1929,7 +1927,7 @@ int UkEngine::processBackspace(int & backs, unsigned char *outBuf, int & outSize
     m_changePos = m_current + 1;
     markChange(m_current);
 
-    if (m_current == 0 || 
+    if (m_current == 0 ||
         m_buffer[m_current].form == vnw_empty ||
         m_buffer[m_current].form == vnw_nonVn ||
         m_buffer[m_current].form == vnw_c ||
@@ -1943,7 +1941,7 @@ int UkEngine::processBackspace(int & backs, unsigned char *outBuf, int & outSize
         synchKeyStrokeBuffer();
         return (backs > 1);
     }
-  
+
     VowelSeq vs, newVs;
     int curTonePos, newTonePos, tone, vStart, vEnd;
 
@@ -1955,7 +1953,7 @@ int UkEngine::processBackspace(int & backs, unsigned char *outBuf, int & outSize
     newTonePos = vStart + getTonePosition(newVs, true);
     tone = m_buffer[curTonePos].tone;
 
-    if (tone == 0 || curTonePos == newTonePos || 
+    if (tone == 0 || curTonePos == newTonePos ||
         (curTonePos == m_current && m_buffer[m_current].tone != 0)) {
         m_current--;
         backs = m_backs;
@@ -2264,14 +2262,14 @@ int UkEngine::processWordEnd(UkKeyEvent & ev)
     entry.keyCode = ev.keyCode;
     entry.vnSym = vnToLower(ev.vnSym);
     entry.caps = (entry.vnSym != ev.vnSym);
-    
+
     if (m_keyRestored && outSize < *m_pOutSize) {
         m_pOutBuf[outSize] = ev.keyCode;
         outSize++;
         *m_pOutSize = outSize;
         return 1;
     }
- 
+
     return 0;
 }
 
