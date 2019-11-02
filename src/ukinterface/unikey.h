@@ -190,5 +190,6 @@ __RE_EXPORT__ int UnikeyLoadUserKeyMap(const char *fileName);
 //e.g: GD&DDT,QDDND...
 //The engine will return to normal mode when a word-break occurs.
 __RE_EXPORT__ void UnikeySetSingleMode();
+__RE_EXPORT__ bool UnikeyAtWordBeginning();
 
 #endif

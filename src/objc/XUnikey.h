@@ -51,6 +51,7 @@
 - (void)setCheckKbCase:(CheckKeyboardCaseCb)callback;
 - (void)backspacePress;
 - (void)restoreKeyStrokes;
+- (bool)atWordBeginning;
 - (void)setSingleMode;
 - (int)setOutputCharset:(int)charset;
 - (int)getOutputCharset;

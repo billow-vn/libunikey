@@ -195,3 +195,9 @@ void UnikeyRestoreKeyStrokes()
     UnikeyBufChars = sizeof(UnikeyBuf);
     MyKbEngine.restoreKeyStrokes(UnikeyBackspaces, UnikeyBuf, UnikeyBufChars, UnikeyOutput);
 }
+
+bool UnikeyAtWordBeginning()
+{
+    return MyKbEngine.atWordBeginning();
+}
+

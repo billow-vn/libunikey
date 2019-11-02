@@ -136,6 +136,10 @@ SyncMap VkToUkMethodList[] = {
     _pEngine->restoreKeyStrokes(_backspaces, _buf, _bufChars, _outputType);
 }
 
+-(bool) atWordBeginning {
+    return _pEngine->atWordBeginning();
+}
+
 - (void)setOptions:(UnikeyOptions *)pOpt {
     _pSharedMem->options.freeMarking = pOpt->freeMarking;
     _pSharedMem->options.modernStyle = pOpt->modernStyle;

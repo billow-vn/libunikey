@@ -109,9 +109,9 @@ public:
 class SingleByteCharset: public VnCharset {
 protected:
 	UKWORD m_stdMap[256];
-	UKWORD * m_vnChars;
+	UKBYTE * m_vnChars;
 public:
-	SingleByteCharset(UKWORD * vnChars);
+	SingleByteCharset(UKBYTE * vnChars);
 	virtual int nextInput(ByteInStream & is, StdVnChar & stdChar, int & bytesRead);
 	virtual int putChar(ByteOutStream & os, StdVnChar stdChar, int & outLen);
 };
@@ -283,7 +283,7 @@ public:
 	VnCharset * getVnCharset(int charsetIdx);
 };
 
-extern UKWORD SingleByteTables[][TOTAL_VNCHARS];
+extern UKBYTE SingleByteTables[][TOTAL_VNCHARS];
 extern UKWORD DoubleByteTables[][TOTAL_VNCHARS];
 extern UnicodeChar UnicodeTable[TOTAL_VNCHARS];
 extern UKDWORD VIQRTable[TOTAL_VNCHARS];

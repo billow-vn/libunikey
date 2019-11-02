@@ -99,7 +99,7 @@ enum VnConvError {
 typedef struct _CharsetNameId CharsetNameId;
 
 struct _CharsetNameId {
-	char *name;
+	const char *name;
 	int id;
 };
 

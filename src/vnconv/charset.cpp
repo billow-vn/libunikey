@@ -20,7 +20,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 --------------------------------------------------------------------------------*/
 
-#include "stdafx.h"
 #include <stddef.h>
 #include <search.h>
 #include <memory.h>
@@ -63,10 +62,8 @@ int VnInternalCharset::nextInput(ByteInStream & is, StdVnChar & stdChar, int & b
 int VnInternalCharset::putChar(ByteOutStream & os, StdVnChar stdChar, int & outLen)
 {
   outLen = sizeof(StdVnChar);
-  UKWORD *pWord = (UKWORD *)&stdChar;
-  os.putW(*pWord);
-  pWord++;
-  return os.putW(*pWord);
+  os.putW((UKWORD)stdChar);
+  return os.putW((UKWORD)(stdChar>>(sizeof(UKWORD)*8)));
 }
 
 //-------------------------------------------
@@ -76,7 +73,7 @@ int VnInternalCharset::elementSize()
 }
 
 //-------------------------------------------
-SingleByteCharset::SingleByteCharset(UKWORD * vnChars)
+SingleByteCharset::SingleByteCharset(UKBYTE * vnChars)
 {
 	int i;
 	m_vnChars = vnChars;
@@ -690,7 +687,7 @@ int DoubleByteCharset::putChar(ByteOutStream & os, StdVnChar stdChar, int & outL
 
 unsigned char VIQRTones[] = {'\'','`','?','~','.'};
 
-char *VIQREscapes[] = {
+const char *VIQREscapes[] = {
 	"://",
 	"/",
 	"@",
@@ -1028,8 +1025,8 @@ CVnCharsetLib::CVnCharsetLib()
 		m_dbCharsets[i] = NULL;
 
 	VnConvResetOptions(&m_options);
-	m_VIQREscPatterns.init(VIQREscapes, VIQREscCount);
-	m_VIQROutEscPatterns.init(VIQREscapes, VIQREscCount);
+	m_VIQREscPatterns.init((char**)VIQREscapes, VIQREscCount);
+	m_VIQROutEscPatterns.init((char**)VIQREscapes, VIQREscCount);
 }
 
 

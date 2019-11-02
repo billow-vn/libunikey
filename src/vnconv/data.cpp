@@ -20,7 +20,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 --------------------------------------------------------------------------------*/
 
-#include "stdafx.h"
 #include "charset.h"
 
 /*
@@ -94,7 +93,7 @@ its code point in the charset must be set to zero.
 See TCVN3 & VPS below for examples
 */
 
-UKWORD SingleByteTables[][TOTAL_VNCHARS] = {{
+UKBYTE SingleByteTables[][TOTAL_VNCHARS] = {{
     // TCVN3
     'A', 'a', 0xB8, 0xB8, 0xB5, 0xB5, 0xB6, 0xB6, 0xB7, 0xB7, 0xB9, 0xB9,      // 0: a
     0xA2, 0xA9, 0xCA, 0xCA, 0xC7, 0xC7, 0xC8, 0xC8, 0xC9, 0xC9, 0xCB, 0xCB,        // 1: a^
@@ -430,7 +429,7 @@ UnicodeChar UnicodeTable[TOTAL_VNCHARS] = {
 };
 
 /*
-UKWORD WesternSymbols[] =
+UKBYTE WesternSymbols[] =
 	{0x80, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88,
 	 0x89, 0x8A, 0x8B, 0x8C, 0x8E, 0x91, 0x92, 0x93,
 	 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B,

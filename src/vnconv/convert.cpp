@@ -20,7 +20,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 --------------------------------------------------------------------------------*/
 
-#include "stdafx.h"
 #include "charset.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,7 +117,7 @@ DllExport int VnFileConvert(int inCharset, int outCharset, const char *inFile, c
 	FILE *inf = NULL;
 	FILE *outf = NULL;
 	int ret = 0;
-	char *tmpName = NULL;
+	char tmpName[32];
 
 	if (inFile == NULL) {
 		inf = stdin;
@@ -152,9 +151,10 @@ DllExport int VnFileConvert(int inCharset, int outCharset, const char *inFile, c
 		else
 			*p = 0;
 
-		tmpName = tempnam(outDir, NULL);
+		strcpy(tmpName, outDir);
+        strcat(tmpName, "XXXXXX");
 
-		if (tmpName == NULL) {
+		if (mkstemp(tmpName) == -1) {
 			fclose(inf);
 			ret = VNCONV_ERR_OUTPUT_FILE;
 			goto end;
@@ -163,7 +163,6 @@ DllExport int VnFileConvert(int inCharset, int outCharset, const char *inFile, c
 
 		if (outf == NULL) {
 			fclose(inf);
-			free(tmpName);
 			ret = VNCONV_ERR_OUTPUT_FILE; 
 			goto end;
 		}
@@ -182,11 +181,10 @@ DllExport int VnFileConvert(int inCharset, int outCharset, const char *inFile, c
 #if !defined(_WIN32)
 			char cmd[256];
 			sprintf(cmd, "mv %s %s", tmpName, outFile);
-			system(cmd);
+			cmd[0] = system(cmd);
 #else
 			if (rename(tmpName, outFile) != 0) {
 				remove(tmpName);
-				free(tmpName);
 				ret = VNCONV_ERR_OUTPUT_FILE;
 				goto end;
 			}
@@ -194,7 +192,6 @@ DllExport int VnFileConvert(int inCharset, int outCharset, const char *inFile, c
 		}
 		else 
 			remove(tmpName);
-		free(tmpName);
 	}
 
 end:
@@ -233,7 +230,7 @@ int vnFileStreamConvert(int inCharset, int outCharset, FILE * inf, FILE *outf)
 	return genConvert(*pInCharset, *pOutCharset, is, os);
 }
 
-char *ErrTable[VNCONV_LAST_ERROR] = 
+const char *ErrTable[VNCONV_LAST_ERROR] =
 {"No error",
  "Unknown error",
  "Invalid charset",
