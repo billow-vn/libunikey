@@ -20,7 +20,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "stdafx.h"
+
 #include <iostream>
 #include "inputproc.h"
 
@@ -124,6 +124,21 @@ DllExport UkKeyMapping SimpleTelexMethodMapping[] = {
     {'X', vneTone4},
     {'J', vneTone5},
     {'W', vneHookAll},
+    {'A', vneRoof_a},
+    {'E', vneRoof_e},
+    {'O', vneRoof_o},
+    {'D', vneDd},
+    {0, vneNormal}
+};
+
+DllExport UkKeyMapping SimpleTelex2MethodMapping[] = {
+    {'Z', vneTone0},
+    {'S', vneTone1},
+    {'F', vneTone2},
+    {'R', vneTone3},
+    {'X', vneTone4},
+    {'J', vneTone5},
+    {'W', vne_telex_w},
     {'A', vneRoof_a},
     {'E', vneRoof_e},
     {'O', vneRoof_o},
@@ -263,6 +278,12 @@ int UkInputProcessor::setIM(UkInputMethod im)
     switch (im) {
         case UkTelex:
             useBuiltIn(TelexMethodMapping);
+            break;
+        case UkSimpleTelex:
+            useBuiltIn(SimpleTelexMethodMapping);
+            break;
+        case UkSimpleTelex2:
+            useBuiltIn(SimpleTelex2MethodMapping);
             break;
         case UkVni:
             useBuiltIn(VniMethodMapping);

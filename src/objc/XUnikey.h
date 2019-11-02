@@ -19,14 +19,15 @@
     typedef void (* CheckKeyboardCaseCb)(int *pShiftPressed, int *pCapslockOn);
 
 @interface XUnikey : NSObject
-@property(nonatomic, assign) unsigned char *buf;
-@property(nonatomic, assign) int backspaces;
-@property(nonatomic, assign) int bufChars;
-@property(nonatomic, assign) int capsLockOn;
-@property(nonatomic, assign) int shiftPressed;
-@property(nonatomic, assign) bool isSendForward;
-@property(nonatomic, assign) UkOutputType outputType;
-@property(nonatomic, assign) VkInputMethod imPrev;
+
+@property(assign) unsigned char *buf;
+@property(assign) int backspaces;
+@property(assign) int bufChars;
+@property(assign) int capsLockOn;
+@property(assign) int shiftPressed;
+@property(assign) bool isSendForward;
+@property(assign) UkOutputType outputType;
+@property(assign) VkInputMethod imPrev;
 
 
 - (void)setOptions:(UnikeyOptions *)pOpt;

@@ -46,7 +46,8 @@ typedef enum {
     UkViqr,
     UkMsVi,
     UkUsrIM,
-    UkSimpleTelex
+    UkSimpleTelex,
+    UkSimpleTelex2
 } UkInputMethod;
 
 typedef enum {
@@ -89,6 +90,7 @@ struct _UnikeySysInfo
 {
   int switchKey;
   HHOOK keyHook;
+  HHOOK mouseHook;
   HWND hMainDlg;
   UINT iconMsgId;
   HICON hVietIcon,hEnIcon;

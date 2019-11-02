@@ -20,6 +20,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #ifndef __UKENGINE_H
 #define __UKENGINE_H
 
@@ -33,7 +34,6 @@ struct UkSharedMem {
     //states
     int initialized;
     int vietKey;
-    int iconShown;
 
     UnikeyOptions options;
     UkInputProcessor input;
@@ -46,9 +46,6 @@ struct UkSharedMem {
 #endif
     CMacroTable macStore;
 };
-
-#define CTRL_SHIFT_SW 0
-#define ALT_Z_SW 1
 
 #define MAX_UK_ENGINE 128
 

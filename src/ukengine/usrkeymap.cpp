@@ -21,8 +21,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 
 #include <ctype.h>
@@ -226,7 +227,7 @@ void initKeyMap(int keyMap[256])
         keyMap[c] = vneNormal;
 }
 
-char *UkKeyMapHeader = 
+const char *UkKeyMapHeader =
     "; This is UniKey user-defined key mapping file, generated from UniKey (Windows)\n\n";
 
 DllExport int UkStoreKeyOrderMap(const char *fileName, UkKeyMapPair *pMap, int mapCount)

@@ -173,7 +173,7 @@ SyncMap VkToUkMethodList[] = {
         UkOff
     );
 
-    if (im == UkTelex || im == UkVni || im == UkViqr) {
+    if (im == UkTelex || im == UkVni || im == UkSimpleTelex || im == UkSimpleTelex2) {
         _pSharedMem->input.setIM(im);
         _pEngine->reset();
     } else if (im == UkUsrIM && _pSharedMem->usrKeyMapLoaded) {
