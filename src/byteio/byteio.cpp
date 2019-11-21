@@ -155,7 +155,7 @@ int StringBIStream::gotoBookmark()
 int StringBIStream::close()
 {
 	return 1;
-};
+}
 
 //////////////////////////////////////////////////
 // Class StringBOStream
@@ -516,7 +516,7 @@ int FileBOStream::puts(const char *s, int size)
 		m_bad = (fputs(s, m_file) == EOF);
 		return (!m_bad);
 	}
-	int out = fwrite(s, 1, size, m_file);
+	int out = (int)fwrite(s, 1, size, m_file);
 	m_bad = (out != size);
 	return (!m_bad);
 }

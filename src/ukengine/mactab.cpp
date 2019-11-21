@@ -312,7 +312,7 @@ int CMacroTable::addItem(const char *item, int charset)
   char key[MAX_MACRO_KEY_LEN];
   
   // Parse the input item
-  const char * pos = strchr(item, ':');
+  const char *pos = (char *) strchr(item, ':');
   if (pos == NULL)
     return -1;
   int keyLen = (int)(pos - item);
@@ -320,7 +320,7 @@ int CMacroTable::addItem(const char *item, int charset)
     keyLen = MAX_MACRO_KEY_LEN-1;
   strncpy(key, item, keyLen);
   key[keyLen] = '\0';
-  return addItem(key, ++pos, charset);
+  return addItem(key, pos + 1, charset);
 }
 
 //---------------------------------------------------------------
@@ -337,7 +337,7 @@ void CMacroTable::sortData() {
 }
 
 //---------------------------------------------------------------
-const StdVnChar *CMacroTable::getKey(int idx)
+const StdVnChar *CMacroTable::getKey(int idx) const
 {
     if (idx < 0 || idx >= m_count)
         return 0;
@@ -345,7 +345,7 @@ const StdVnChar *CMacroTable::getKey(int idx)
 }
 
 //---------------------------------------------------------------
-const StdVnChar *CMacroTable::getText(int idx)
+const StdVnChar *CMacroTable::getText(int idx) const
 {
     if (idx < 0 || idx >= m_count)
         return 0;

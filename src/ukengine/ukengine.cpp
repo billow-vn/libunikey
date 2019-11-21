@@ -39,7 +39,11 @@
 
 using namespace std;
 
-#define ENTER_CHAR 13
+#define CHAR_ENTER 13
+#define CHAR_TAB_H 9
+#define CHAR_TAB_V 11
+#define CHAR_SPACE 32
+
 #define IS_ODD(x) (x & 1)
 #define IS_EVEN(x) (!(x & 1))
 
@@ -715,7 +719,8 @@ int UkEngine::processHookWithUO(UkKeyEvent & ev)
             if (v[1] == vnl_o || v[1] == vnl_or) {
                 //uo -> uo+ if prefixed by "th"
                 if ((vs == vs_uo || vs == vs_uor) && vEnd == m_current &&
-                    m_buffer[m_current].form == vnw_cv && m_buffer[m_current-2].cseq == cs_th)
+                    m_buffer[m_current].form == vnw_cv &&
+                    (m_buffer[m_current-2].cseq == cs_th || m_buffer[m_current-2].cseq == cs_h))
                 {
                     newVs = vs_uoh;
                     markChange(vStart+1);
@@ -1303,9 +1308,15 @@ int UkEngine::processAppend(UkKeyEvent & ev)
     int ret = 0;
     switch (ev.chType) {
     case ukcReset:
-        if (ev.keyCode == ENTER_CHAR) {
-            if (m_pCtrl->options.macroEnabled && macroMatch(ev))
-                return 1;
+        switch ((int) ev.keyCode) {
+            case CHAR_ENTER:
+            case CHAR_TAB_H:
+            case CHAR_TAB_V:
+            case CHAR_SPACE:
+                if (m_pCtrl->options.macroEnabled && macroMatch(ev)) {
+                    return 1;
+                }
+                break;
         }
         reset();
         return 0;
@@ -1498,8 +1509,7 @@ int UkEngine::appendVowel(UkKeyEvent & ev)
   }
 
     if (!autoCompleted &&
-        (m_pCtrl->charsetId != CONV_CHARSET_UNI_CSTRING) &&
-        isalpha(entry.keyCode)) {
+        (m_pCtrl->charsetId != CONV_CHARSET_UNI_CSTRING) && isalpha(entry.keyCode)) {
         return 0;
     }
 
@@ -1749,6 +1759,7 @@ int UkEngine::process(unsigned int keyCode, int & backs, unsigned char *outBuf, 
     m_reverted = false;
     m_keyRestored = false;
     m_keyRestoring = false;
+    m_hasMacroInput = false;
     m_outType = UkCharOutput;
 
     m_pCtrl->input.keyCodeToEvent(keyCode, ev);
@@ -1990,6 +2001,7 @@ void UkEngine::reset()
     m_keyCurrent = -1;
     m_singleMode = false;
     m_toEscape = false;
+    m_hasMacroInput = false;
 }
 
 //------------------------------------------------
@@ -2048,7 +2060,6 @@ void UkEngine::prepareBuffer()
 
 }
 
-#define ENTER_CHAR 13
 enum VnCaseType {VnCaseNoChange, VnCaseAllCapital, VnCaseAllSmall};
 
 //----------------------------------------------------
@@ -2060,12 +2071,19 @@ int UkEngine::macroMatch(UkKeyEvent & ev)
     if (m_keyCheckFunc)
         m_keyCheckFunc(&shiftPressed, &capsLockOn);
 
-    if (shiftPressed && (ev.keyCode ==' ' || ev.keyCode == ENTER_CHAR))
-        return 0;
+    if (shiftPressed) {
+        switch ((int) ev.keyCode) {
+            case CHAR_ENTER:
+            case CHAR_TAB_H:
+            case CHAR_TAB_V:
+            case CHAR_SPACE:
+                return 0;
+        }
+    }
 
     const StdVnChar *pMacText = NULL;
     StdVnChar key[MAX_MACRO_KEY_LEN+1];
-    StdVnChar *pKeyStart;
+    StdVnChar *pKeyStart = nullptr;
 
     // Use static macro text so we can gain a bit of performance
     // by avoiding memory allocation each time this function is called
@@ -2164,6 +2182,7 @@ int UkEngine::macroMatch(UkKeyEvent & ev)
 	        &inLen, &maxOutSize);
     outSize = maxOutSize;
 
+    /*
     //write the last input character
     StdVnChar vnChar;
     if (outSize < *m_pOutSize) {
@@ -2178,6 +2197,7 @@ int UkEngine::macroMatch(UkKeyEvent & ev)
 	            &inLen, &maxOutSize);
         outSize += maxOutSize;
     }
+    */
     int backs = m_backs; //store m_backs before calling reset
     reset();
     m_outputWritten = true;

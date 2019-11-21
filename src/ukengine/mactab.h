@@ -57,9 +57,9 @@ public:
     int writeToFile(const char *fname);
 
     const StdVnChar *lookup(StdVnChar *key);
-    const StdVnChar *getKey(int idx);
-    const StdVnChar *getText(int idx);
-    int getCount() { return m_count; }
+    const StdVnChar *getKey(int idx) const;
+    const StdVnChar *getText(int idx) const;
+    int getCount() const { return m_count; }
     void resetContent();
     void sortData();
     int addItem(const char *item, int charset);
