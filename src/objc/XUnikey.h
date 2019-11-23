@@ -23,7 +23,7 @@
 @property(nonatomic, readonly) int backspaces;
 @property(nonatomic, readonly) int bufChars;
 @property(nonatomic, readonly) UkOutputType output;
-@property(assign) bool isSendForward;
+@property(nonatomic, assign) bool isSendForward;
 
 - (void)setOptions:(UnikeyOptions)pOpt;
 - (UnikeyOptions)getOptions;

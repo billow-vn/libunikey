@@ -103,19 +103,4 @@ struct _UnikeySysInfo
 typedef enum {
     UkCharOutput, UkKeyOutput
 } UkOutputType;
-
-static int SyncTranslate(int from, SyncMap *list, int count, int fallback) {
-    int i;
-
-    for (i = 0; i < count && list[i].from != from; i++) {
-        continue;
-    }
-
-    if (i == count) {
-        return fallback;
-    }
-
-    return list[i].to;
-}
-
 #endif

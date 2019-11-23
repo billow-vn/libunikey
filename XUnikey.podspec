@@ -183,6 +183,9 @@ All options are set through configuration file or keyboard shortcuts.
 
         ss.header_mappings_dir = 'src/ukinterface'
         ss.source_files = "src/ukinterface/*.{h,hpp,c,cc,cpp}"
-        ss.private_header_files = "src/ukinterface/*.{h,hpp}"
+        # ss.private_header_files = "src/ukinterface/*.{h,hpp}"
+        ss.public_header_files = [
+            "src/ukinterface/{unikey}.h"
+        ]
     end
 end
