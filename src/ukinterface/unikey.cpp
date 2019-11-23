@@ -45,21 +45,47 @@ int UnikeyBufChars;
 UkOutputType UnikeyOutput;
 
 //--------------------------------------------
-void UnikeySetInputMethod(UkInputMethod im)
-{
-  if (im == UkTelex || im == UkVni || im == UkSimpleTelex || im == UkSimpleTelex2) {
-    pShMem->input.setIM(im);
-    MyKbEngine.reset();
-  }
-  else if (im == UkUsrIM && pShMem->usrKeyMapLoaded) {
-    //cout << "Switched to user mode\n"; //DEBUG
-    pShMem->input.setIM(pShMem->usrKeyMap);
-    MyKbEngine.reset();
-  }
+bool UnikeyIsEnabled() {
+    bool flag = (bool) pShMem->vietKey;
+    if (flag) {
+        switch (UnikeyGetInputMethod()) {
+            case UkOff:
+                flag = false;
+                break;
+            default:
+                flag = true;
+        }
+    }
 
-  //cout << "IM changed to: " << im << endl; //DEBUG
+    return flag;
 }
 
+//--------------------------------------------
+bool UnikeyToggleIsEnabled() {
+    bool flag = !((bool) pShMem->vietKey);
+    pShMem->vietKey = flag;
+
+    return flag;
+}
+
+//--------------------------------------------
+void UnikeySetInputMethod(UkInputMethod im) {
+    if (im == UkTelex || im == UkVni || im == UkSimpleTelex || im == UkSimpleTelex2) {
+        pShMem->input.setIM(im);
+        MyKbEngine.reset();
+    } else if (im == UkUsrIM && pShMem->usrKeyMapLoaded) {
+        //cout << "Switched to user mode\n"; //DEBUG
+        pShMem->input.setIM(pShMem->usrKeyMap);
+        MyKbEngine.reset();
+    }
+
+    //cout << "IM changed to: " << im << endl; //DEBUG
+}
+
+//--------------------------------------------
+UkInputMethod UnikeyGetInputMethod() {
+    return pShMem->input.getIM();
+}
 
 //--------------------------------------------
 void UnikeySetCapsState(int shiftPressed, int CapsLockOn)
@@ -75,6 +101,11 @@ int UnikeySetOutputCharset(int charset)
     pShMem->charsetId = charset;
     MyKbEngine.reset();
     return 1;
+}
+
+//--------------------------------------------
+int UnikeyGetOutputCharset() {
+    return pShMem->charsetId;
 }
 
 //--------------------------------------------
@@ -117,7 +148,13 @@ void UnikeyCheckKbCase(int *pShiftPressed, int *pCapsLockOn)
 //--------------------------------------------
 void UnikeySetup()
 {
+    UnikeyBackspaces = 0;
+    UnikeyBufChars = 0;
+    UnikeyBufChars = 0;
+
     SetupUnikeyEngine();
+
+    // _pEngine = new UkEngine();
     pShMem = new UkSharedMem;
     pShMem->input.init();
     pShMem->macStore.init();
@@ -125,8 +162,10 @@ void UnikeySetup()
     pShMem->usrKeyMapLoaded = 0;
     MyKbEngine.setCtrlInfo(pShMem);
     MyKbEngine.setCheckKbCaseFunc(&UnikeyCheckKbCase);
+
     UnikeySetInputMethod(UkTelex);
     UnikeySetOutputCharset(CONV_CHARSET_XUTF8);
+
     pShMem->initialized = 1;
     CreateDefaultUnikeyOptions(&pShMem->options);
 }
@@ -187,6 +226,26 @@ int UnikeyLoadUserKeyMap(const char *fileName)
     return 1;
   }
   return 0;
+}
+
+//--------------------------------------------
+bool UnikeyHasMacroInput() {
+    return (bool) MyKbEngine.hasMacroInput();
+}
+
+//--------------------------------------------
+void UnikeyMacroAddItem(const char *key, const char *text) {
+    pShMem->macStore.addItem(key, text, CONV_CHARSET_UNIUTF8);
+}
+
+//--------------------------------------------
+void UnikeyMacroResetContent() {
+    pShMem->macStore.resetContent();
+}
+
+//--------------------------------------------
+void UnikeyMacroSortData() {
+    pShMem->macStore.sortData();
 }
 
 //--------------------------------------------

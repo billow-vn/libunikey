@@ -40,6 +40,7 @@ typedef struct {
 } SyncMap;
 
 typedef enum {
+    UkNan,
     UkOff,
     UkTelex,
     UkVni,

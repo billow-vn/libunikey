@@ -1,5 +1,6 @@
 #import "vnconv.h"
 #import "keycons.h"
+#import "unikey.h"
 
 #if defined(UIKIT_EXTERN)
     #define BKL_XUNIKEY_EXTERN UIKIT_EXTERN
@@ -16,31 +17,22 @@
 #ifndef BKL_XUNIKEY_H
     #define BKL_XUNIKEY_H
 
-    typedef void (* CheckKeyboardCaseCb)(int *pShiftPressed, int *pCapslockOn);
-
 @interface XUnikey : NSObject
 
-@property(assign) unsigned char *buf;
-@property(assign) int backspaces;
-@property(assign) int bufChars;
-@property(assign) int capsLockOn;
-@property(assign) int shiftPressed;
+@property(nonatomic, readonly) unsigned char *buf;
+@property(nonatomic, readonly) int backspaces;
+@property(nonatomic, readonly) int bufChars;
+@property(nonatomic, readonly) UkOutputType output;
 @property(assign) bool isSendForward;
-@property(assign) UkOutputType outputType;
-@property(assign) VkInputMethod imPrev;
 
-
-- (void)setOptions:(UnikeyOptions *)pOpt;
-- (UnikeyOptions *)getOptions;
+- (void)setOptions:(UnikeyOptions)pOpt;
+- (UnikeyOptions)getOptions;
 - (void)createDefaultOptions:(UnikeyOptions *)pOpt;
-- (void)setInputMethod:(VkInputMethod)im;
-- (VkInputMethod)getInputMethod;
-- (void)setInputMethodVk:(VkInputMethod)im;
-- (VkInputMethod)getInputMethodVk;
+- (void)setInputMethod:(UkInputMethod)im;
+- (UkInputMethod)getInputMethod;
 
 - (void)setup;
 - (bool)isEnabled;
-- (void)setIsEnabled:(int)flag;
 - (bool)toggleIsEnabled;
 - (void)cleanup;
 - (void)resetBuf;
@@ -48,7 +40,6 @@
 - (void)putChar:(uint)ch;
 - (void)setIsSendForward:(bool)flag;
 - (void)setCapsState:(int)shiftPressed capsLockOn:(int)capsLockOn;
-- (void)setCheckKbCase:(CheckKeyboardCaseCb)callback;
 - (void)backspacePress;
 - (void)restoreKeyStrokes;
 - (bool)atWordBeginning;

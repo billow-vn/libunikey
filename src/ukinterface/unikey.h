@@ -151,6 +151,8 @@ __RE_EXPORT__ UkOutputType UnikeyOutput;
 
 __RE_EXPORT__ void UnikeySetup(); // always call this first
 __RE_EXPORT__ void UnikeyCleanup(); // call this when unloading unikey module
+__RE_EXPORT__ bool UnikeyIsEnabled();
+__RE_EXPORT__ bool UnikeyToggleIsEnabled();
 
 // call this to reset Unikey's state when focus, context is changed or
 // some control key is pressed
@@ -178,13 +180,21 @@ __RE_EXPORT__ void UnikeyGetOptions(UnikeyOptions *pOpt);
 // set input method
 //   im: TELEX_INPUT, VNI_INPUT, VIQR_INPUT, VIQR_STAR_INPUT
 __RE_EXPORT__ void UnikeySetInputMethod(UkInputMethod im);
+__RE_EXPORT__ UkInputMethod UnikeyGetInputMethod();
+
 // set output format
 //  void UnikeySetOutputVIQR();
 // void UnikeySetOutputUTF8();
 __RE_EXPORT__ int UnikeySetOutputCharset(int charset);
+__RE_EXPORT__ int UnikeyGetOutputCharset();
 
 __RE_EXPORT__ int UnikeyLoadMacroTable(const char *fileName);
 __RE_EXPORT__ int UnikeyLoadUserKeyMap(const char *fileName);
+
+__RE_EXPORT__ bool UnikeyHasMacroInput();
+__RE_EXPORT__ void UnikeyMacroAddItem(const char * key, const char *text);
+__RE_EXPORT__ void UnikeyMacroResetContent();
+__RE_EXPORT__ void UnikeyMacroSortData();
 
 //call this to enable typing vietnamese even in a non-vn sequence
 //e.g: GD&DDT,QDDND...
