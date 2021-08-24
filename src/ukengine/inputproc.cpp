@@ -207,6 +207,9 @@ DllExport UkKeyMapping MsViMethodMapping[] = {
 //-------------------------------------------
 void SetupInputClassifierTable()
 {
+  if (!ClassifierTableInitialized) {
+    ClassifierTableInitialized = true;
+  }
   unsigned int c;
   int i;
 
