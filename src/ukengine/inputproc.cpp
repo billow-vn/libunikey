@@ -38,15 +38,17 @@ unsigned char WordBreakSyms[] = {
 	'<', '>', '=', '+', '-', '*', '/', '\\',
 	'_', '@', '#', '$', '%', '&', '(', ')', '{', '}', '[', ']', '|'}; //we excluded ~, `, ^
 
-VnLexiName AZLexiUpper[] = 
-  {vnl_A, vnl_B, vnl_C, vnl_D, vnl_E, vnl_F, vnl_G, vnl_H, vnl_I, vnl_J,
-   vnl_K, vnl_L, vnl_M, vnl_N, vnl_O, vnl_P, vnl_Q, vnl_R, vnl_S, vnl_T,
-   vnl_U, vnl_V, vnl_W, vnl_X, vnl_Y, vnl_Z};
+VnLexiName AZLexiUpper[] = {
+    vnl_A, vnl_B, vnl_C, vnl_D, vnl_E, vnl_F, vnl_G, vnl_H, vnl_I, vnl_J,
+    vnl_K, vnl_L, vnl_M, vnl_N, vnl_O, vnl_P, vnl_Q, vnl_R, vnl_S, vnl_T,
+    vnl_U, vnl_V, vnl_W, vnl_X, vnl_Y, vnl_Z
+};
 
-VnLexiName AZLexiLower[] =
-  {vnl_a, vnl_b, vnl_c, vnl_d, vnl_e, vnl_f, vnl_g, vnl_h, vnl_i, vnl_j,
-   vnl_k, vnl_l, vnl_m, vnl_n, vnl_o, vnl_p, vnl_q, vnl_r, vnl_s, vnl_t,
-   vnl_u, vnl_v, vnl_w, vnl_x, vnl_y, vnl_z};
+VnLexiName AZLexiLower[] ={
+    vnl_a, vnl_b, vnl_c, vnl_d, vnl_e, vnl_f, vnl_g, vnl_h, vnl_i, vnl_j,
+    vnl_k, vnl_l, vnl_m, vnl_n, vnl_o, vnl_p, vnl_q, vnl_r, vnl_s, vnl_t,
+    vnl_u, vnl_v, vnl_w, vnl_x, vnl_y, vnl_z
+};
 
 UkCharType UkcMap[256];
 
@@ -207,71 +209,74 @@ DllExport UkKeyMapping MsViMethodMapping[] = {
 //-------------------------------------------
 void SetupInputClassifierTable()
 {
-  if (!ClassifierTableInitialized) {
-    ClassifierTableInitialized = true;
-  }
-  unsigned int c;
-  int i;
+    if (!ClassifierTableInitialized) {
+        ClassifierTableInitialized = true;
+    }
+    unsigned int c;
+    int i;
 
-  for (c=0; c<=32; c++) {
-    UkcMap[c] = ukcReset;
-  }
+    for (c = 0; c <= 32; c++) {
+        UkcMap[c] = ukcReset;
+    }
 
-  for (c=33; c<256; c++) {
-    UkcMap[c] = ukcNonVn;
-  }
+    for (c = 33; c < 256; c++) {
+        UkcMap[c] = ukcNonVn;
+    }
 
-  /*
-  for (c = '0'; c <= '9'; c++)
-    UkcMap[c] = ukcNonVn;
-  */
+    /*
+    for (c = '0'; c <= '9'; c++)
+      UkcMap[c] = ukcNonVn;
+    */
 
-  for (c = 'a'; c <= 'z'; c++)
-    UkcMap[c] = ukcVn;
-  for (c = 'A'; c <= 'Z'; c++)
-    UkcMap[c] = ukcVn;
+    for (c = 'a'; c <= 'z'; c++) {
+        UkcMap[c] = ukcVn;
+    }
+    for (c = 'A'; c <= 'Z'; c++) {
+        UkcMap[c] = ukcVn;
+    }
 
-  for (i=0; AscVnLexiList[i].asc; i++) {
-      UkcMap[AscVnLexiList[i].asc] = ukcVn;
-  }
+    for (i = 0; AscVnLexiList[i].asc; i++) {
+        UkcMap[AscVnLexiList[i].asc] = ukcVn;
+    }
 
-  UkcMap[(unsigned char)'j'] = ukcNonVn;
-  UkcMap[(unsigned char)'J'] = ukcNonVn;
-  UkcMap[(unsigned char)'f'] = ukcNonVn;
-  UkcMap[(unsigned char)'F'] = ukcNonVn;
-  UkcMap[(unsigned char)'w'] = ukcNonVn;
-  UkcMap[(unsigned char)'W'] = ukcNonVn;
+    UkcMap[(unsigned char)'j'] = ukcNonVn;
+    UkcMap[(unsigned char)'J'] = ukcNonVn;
+    UkcMap[(unsigned char)'f'] = ukcNonVn;
+    UkcMap[(unsigned char)'F'] = ukcNonVn;
+    UkcMap[(unsigned char)'w'] = ukcNonVn;
+    UkcMap[(unsigned char)'W'] = ukcNonVn;
 
-  int count = sizeof(WordBreakSyms)/sizeof(unsigned char);
-  for (i = 0; i < count; i++)
-    UkcMap[WordBreakSyms[i]] = ukcWordBreak;
+    int count = sizeof(WordBreakSyms) / sizeof(unsigned char);
+    for (i = 0; i < count; i++) {
+        UkcMap[WordBreakSyms[i]] = ukcWordBreak;
+    }
 
-  //Calculate IsoVnLexiMap
-  for (i = 0; i < 256; i++) {
-      IsoVnLexiMap[i] = vnl_nonVnChar;
-  }
+    //Calculate IsoVnLexiMap
+    for (i = 0; i < 256; i++) {
+        IsoVnLexiMap[i] = vnl_nonVnChar;
+    }
 
-  for (i = 0; AscVnLexiList[i].asc; i++) {
-      IsoVnLexiMap[AscVnLexiList[i].asc] = AscVnLexiList[i].lexi;
-  }
+    for (i = 0; AscVnLexiList[i].asc; i++) {
+        IsoVnLexiMap[AscVnLexiList[i].asc] = AscVnLexiList[i].lexi;
+    }
 
-  for (c = 'a'; c <= 'z'; c++) {
-      IsoVnLexiMap[c] = AZLexiLower[c - 'a'];
-  }
+    for (c = 'a'; c <= 'z'; c++) {
+        IsoVnLexiMap[c] = AZLexiLower[c - 'a'];
+    }
 
-  for (c = 'A'; c <= 'Z'; c++) {
-      IsoVnLexiMap[c] = AZLexiUpper[c - 'A'];
-  }
+    for (c = 'A'; c <= 'Z'; c++) {
+        IsoVnLexiMap[c] = AZLexiUpper[c - 'A'];
+    }
 }
 
 //-------------------------------------------
 void UkInputProcessor::init()
 {
-  if (!ClassifierTableInitialized) {
-    SetupInputClassifierTable();
-    ClassifierTableInitialized = true;
-  }
-  setIM(UkTelex);
+    if (!ClassifierTableInitialized) {
+        SetupInputClassifierTable();
+        ClassifierTableInitialized = true;
+    }
+    setIM(UkTelex);
 }
 
 //-------------------------------------------
@@ -309,33 +314,33 @@ int UkInputProcessor::setIM(UkInputMethod im)
 //-------------------------------------------
 int UkInputProcessor::setIM(int map[256])
 {
-  int i;
-  m_im = UkUsrIM;
-  for (i=0; i<256; i++)
-    m_keyMap[i] = map[i];
-  return 1;
+    int i;
+    m_im = UkUsrIM;
+    for (i = 0; i < 256; i++) {
+        m_keyMap[i] = map[i];
+    }
+    return 1;
 }
-  
 
 //-------------------------------------------
 void UkResetKeyMap(int keyMap[256])
 {
-  unsigned int c;
-  for (c=0; c<256; c++)
-    keyMap[c] = vneNormal;
+    unsigned int c;
+    for (c = 0; c < 256; c++) {
+        keyMap[c] = vneNormal;
+    }
 }
 
 //-------------------------------------------
 void UkInputProcessor::useBuiltIn(UkKeyMapping *map)
 {
     UkResetKeyMap(m_keyMap);
-    for (int i=0; map[i].key; i++) {
+    for (int i = 0; map[i].key; i++) {
         m_keyMap[map[i].key] = map[i].action;
         if (map[i].action < vneCount) {
             if (islower(map[i].key)) {
                 m_keyMap[toupper(map[i].key)] = map[i].action;
-            }
-            else if (isupper(map[i].key)) {
+            } else if (isupper(map[i].key)) {
                 m_keyMap[tolower(map[i].key)] = map[i].action;
             }
         }
@@ -343,15 +348,14 @@ void UkInputProcessor::useBuiltIn(UkKeyMapping *map)
 }
 
 //-------------------------------------------
-void UkInputProcessor::keyCodeToEvent(unsigned int keyCode, UkKeyEvent & ev)
+void UkInputProcessor::keyCodeToEvent(unsigned int keyCode, UkKeyEvent &ev)
 {
     ev.keyCode = keyCode;
     if (keyCode > 255) {
         ev.evType = vneNormal;
         ev.vnSym = IsoToVnLexi(keyCode);
-        ev.chType = (ev.vnSym == vnl_nonVnChar)? ukcNonVn : ukcVn;
-    }
-    else {
+        ev.chType = (ev.vnSym == vnl_nonVnChar) ? ukcNonVn : ukcVn;
+    } else {
         ev.chType = UkcMap[keyCode];
         ev.evType = m_keyMap[keyCode];
 
@@ -363,8 +367,7 @@ void UkInputProcessor::keyCodeToEvent(unsigned int keyCode, UkKeyEvent & ev)
             ev.chType = ukcVn;
             ev.vnSym = (VnLexiName)(ev.evType - vneCount);
             ev.evType = vneMapChar;
-        }
-        else {
+        } else {
             ev.vnSym = IsoToVnLexi(keyCode);
         }
     }
@@ -375,15 +378,14 @@ void UkInputProcessor::keyCodeToEvent(unsigned int keyCode, UkKeyEvent & ev)
 // Key strokes are simply considered character input, not action keys as in
 // keyCodeToEvent method
 //----------------------------------------------------------------
-void UkInputProcessor::keyCodeToSymbol(unsigned int keyCode, UkKeyEvent & ev)
+void UkInputProcessor::keyCodeToSymbol(unsigned int keyCode, UkKeyEvent &ev)
 {
     ev.keyCode = keyCode;
     ev.evType = vneNormal;
     ev.vnSym = IsoToVnLexi(keyCode);
     if (keyCode > 255) {
-        ev.chType = (ev.vnSym == vnl_nonVnChar)? ukcNonVn : ukcVn;
-    }
-    else {
+        ev.chType = (ev.vnSym == vnl_nonVnChar) ? ukcNonVn : ukcVn;
+    } else {
         ev.chType = UkcMap[keyCode];
     }
 }
@@ -391,16 +393,17 @@ void UkInputProcessor::keyCodeToSymbol(unsigned int keyCode, UkKeyEvent & ev)
 //-------------------------------------------
 UkCharType UkInputProcessor::getCharType(unsigned int keyCode)
 {
-  if (keyCode > 255)
-    return (IsoToVnLexi(keyCode) == vnl_nonVnChar) ? ukcNonVn : ukcVn;
-  return UkcMap[keyCode];
+    if (keyCode > 255) {
+        return (IsoToVnLexi(keyCode) == vnl_nonVnChar) ? ukcNonVn : ukcVn;
+    }
+    return UkcMap[keyCode];
 }
 
 //-------------------------------------------
 void UkInputProcessor::getKeyMap(int map[256])
 {
-  int i;
-  for (i=0; i<256; i++)
-    map[i] = m_keyMap[i];
+    int i;
+    for (i = 0; i < 256; i++) {
+        map[i] = m_keyMap[i];
+    }
 }
-

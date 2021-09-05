@@ -118,7 +118,7 @@
 }
 
 - (bool)hasMacroInput {
-    return (bool) UnikeyHasMacroInput();
+    return (bool)UnikeyHasMacroInput();
 }
 
 - (void)macroAddItem:(const char *)key text:(const char *)text {

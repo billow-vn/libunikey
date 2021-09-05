@@ -34,9 +34,9 @@ using namespace std;
 //---------------------------------------------------------------
 void CMacroTable::init()
 {
-  m_memSize = MACRO_MEM_SIZE;
-  m_count = 0;
-  m_occupied = 0;
+    m_memSize = MACRO_MEM_SIZE;
+    m_count = 0;
+    m_occupied = 0;
 }
 
 //---------------------------------------------------------------
@@ -49,19 +49,21 @@ char *MacCompareStartMem;
 
 int macCompare(const void *p1, const void *p2)
 {
-    StdVnChar *s1 = (StdVnChar *) ((char *)MacCompareStartMem + ((MacroDef *)p1)->keyOffset);
-    StdVnChar *s2 = (StdVnChar *) ((char *)MacCompareStartMem + ((MacroDef *)p2)->keyOffset);
+    StdVnChar *s1 = (StdVnChar * )((char *)MacCompareStartMem + ((MacroDef *)p1)->keyOffset);
+    StdVnChar *s2 = (StdVnChar * )((char *)MacCompareStartMem + ((MacroDef *)p2)->keyOffset);
 
     int i;
     StdVnChar ls1, ls2;
 
-    for (i=0; s1[i] != 0 && s2[i] != 0; i++) {
+    for (i = 0; s1[i] != 0 && s2[i] != 0; i++) {
         ls1 = STD_TO_LOWER(s1[i]);
         ls2 = STD_TO_LOWER(s2[i]);
-        if (ls1 > ls2)
+        if (ls1 > ls2) {
             return 1;
-        if (ls1 < ls2)
+        }
+        if (ls1 < ls2) {
             return -1;
+        }
         /*
         if (s1[i] > s2[i])
             return 1;
@@ -69,8 +71,9 @@ int macCompare(const void *p1, const void *p2)
             return -1;
         */
     }
-    if (s1[i] == 0)
-        return (s2[i] == 0)? 0 : -1;
+    if (s1[i] == 0) {
+        return (s2[i] == 0) ? 0 : -1;
+    }
     return 1;
 }
 
@@ -78,17 +81,19 @@ int macCompare(const void *p1, const void *p2)
 int macKeyCompare(const void *key, const void *ele)
 {
     StdVnChar *s1 = (StdVnChar *)key;
-    StdVnChar *s2 = (StdVnChar *) ((char *)MacCompareStartMem + ((MacroDef *)ele)->keyOffset);
+    StdVnChar *s2 = (StdVnChar * )((char *)MacCompareStartMem + ((MacroDef *)ele)->keyOffset);
 
     StdVnChar ls1, ls2;
     int i;
-    for (i=0; s1[i] != 0 && s2[i] != 0; i++) {
+    for (i = 0; s1[i] != 0 && s2[i] != 0; i++) {
         ls1 = STD_TO_LOWER(s1[i]);
         ls2 = STD_TO_LOWER(s2[i]);
-        if (ls1 > ls2)
+        if (ls1 > ls2) {
             return 1;
-        if (ls1 < ls2)
+        }
+        if (ls1 < ls2) {
             return -1;
+        }
         /*
         if (s1[i] > s2[i])
             return 1;
@@ -96,19 +101,21 @@ int macKeyCompare(const void *key, const void *ele)
             return -1;
         */
     }
-    if (s1[i] == 0)
-        return (s2[i] == 0)? 0 : -1;
+    if (s1[i] == 0) {
+        return (s2[i] == 0) ? 0 : -1;
+    }
     return 1;
 }
 
 //---------------------------------------------------------------
 const StdVnChar *CMacroTable::lookup(StdVnChar *key)
 {
-  MacCompareStartMem = m_macroMem;
-  MacroDef *p = (MacroDef *)bsearch(key, m_table, m_count, sizeof(MacroDef), macKeyCompare);
-  if (p)
-    return (StdVnChar *)(m_macroMem + p->textOffset);
-  return 0;
+    MacCompareStartMem = m_macroMem;
+    MacroDef *p = (MacroDef *)bsearch(key, m_table, m_count, sizeof(MacroDef), macKeyCompare);
+    if (p) {
+        return (StdVnChar * )(m_macroMem + p->textOffset);
+    }
+    return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -118,7 +125,7 @@ const StdVnChar *CMacroTable::lookup(StdVnChar *key)
 //
 // Header format: ;[DO NOT DELETE THIS LINE]***version=n
 //----------------------------------------------------------------------------
-bool CMacroTable::readHeader(FILE *f, int & version)
+bool CMacroTable::readHeader(FILE *f, int &version)
 {
     char line[MAX_MACRO_LINE];
     if (!fgets(line, sizeof(line), f)) {
@@ -133,9 +140,7 @@ bool CMacroTable::readHeader(FILE *f, int & version)
     //if BOM is available, skip it
     char *p = line;
     size_t len = strlen(line);
-    if (len >= 3 && (unsigned char)line[0] == 0xEF && (unsigned char)line[1] == 0xBB && 
-                    (unsigned char)line[2] == 0xBF) 
-    {
+    if (len >= 3 && (unsigned char)line[0] == 0xEF && (unsigned char)line[1] == 0xBB && (unsigned char)line[2] == 0xBF) {
         p += 3;
     }
 
@@ -144,9 +149,12 @@ bool CMacroTable::readHeader(FILE *f, int & version)
     if (p) {
         p += 3;
         //skip possible spaces
-        while (*p == ' ') p++;
-        if (sscanf(p, "version=%d", &version) == 1)
+        while (*p == ' ') {
+            p++;
+        }
+        if (sscanf(p, "version=%d", &version) == 1) {
             return true;
+        }
     }
 
     fseek(f, 0, SEEK_SET);
@@ -173,8 +181,9 @@ int CMacroTable::loadFromFile(const char *fname)
     f = fopen(fname, "r");
 #endif
 
-    if (f == NULL) 
+    if (f == NULL) {
         return 0;
+    }
     char line[MAX_MACRO_LINE];
     size_t len;
 
@@ -188,14 +197,17 @@ int CMacroTable::loadFromFile(const char *fname)
 
     while (fgets(line, sizeof(line), f)) {
         len = strlen(line);
-        if (len > 0 && line[len-1] == '\n')
-            line[len-1] = 0;
-        if (len > 1 && line[len-2] == '\r')
-            line[len-2] = 0;
-        if (version == UKMACRO_VERSION_UTF8)
+        if (len > 0 && line[len - 1] == '\n') {
+            line[len - 1] = 0;
+        }
+        if (len > 1 && line[len - 2] == '\r') {
+            line[len - 2] = 0;
+        }
+        if (version == UKMACRO_VERSION_UTF8) {
             addItem(line, CONV_CHARSET_UNIUTF8);
-        else
+        } else {
             addItem(line, CONV_CHARSET_VIQR);
+        }
     }
     fclose(f);
 
@@ -211,96 +223,97 @@ int CMacroTable::loadFromFile(const char *fname)
 //---------------------------------------------------------------
 int CMacroTable::writeToFile(const char *fname)
 {
-  int ret;
-  int inLen, maxOutLen;
-  FILE *f;
+    int ret;
+    int inLen, maxOutLen;
+    FILE *f;
 #if defined(WIN32)
-  f = _tfopen(fname, _TEXT("wt"));
+    f = _tfopen(fname, _TEXT("wt"));
 #else
-  f = fopen(fname, "w");
+    f = fopen(fname, "w");
 #endif
 
-  if (f == NULL)
-    return 0;
+    if (f == NULL) {
+        return 0;
+    }
 
-  char line[MAX_MACRO_LINE*3 + 1]; //1 VnChar may need 3 chars in UTF8
-  char key[MAX_MACRO_KEY_LEN*3];
-  char text[MAX_MACRO_TEXT_LEN*3];
+    char line[MAX_MACRO_LINE * 3 + 1]; //1 VnChar may need 3 chars in UTF8
+    char key[MAX_MACRO_KEY_LEN * 3];
+    char text[MAX_MACRO_TEXT_LEN * 3];
 
-  writeHeader(f);
+    writeHeader(f);
 
-  UKBYTE *p;
-  for (int i=0; i < m_count; i++) {
-    p = (UKBYTE *)m_macroMem + m_table[i].keyOffset;
-    inLen = -1;
-    maxOutLen = sizeof(key);
-    ret = VnConvert(CONV_CHARSET_VNSTANDARD, CONV_CHARSET_UNIUTF8,
-		    (UKBYTE *) p, (UKBYTE *)key,
-		    &inLen, &maxOutLen);
-    if (ret != 0)
-      continue;
+    UKBYTE *p;
+    for (int i = 0; i < m_count; i++) {
+        p = (UKBYTE *)m_macroMem + m_table[i].keyOffset;
+        inLen = -1;
+        maxOutLen = sizeof(key);
+        ret = VnConvert(CONV_CHARSET_VNSTANDARD, CONV_CHARSET_UNIUTF8, (UKBYTE *)p, (UKBYTE *)key, &inLen, &maxOutLen);
+        if (ret != 0) {
+            continue;
+        }
 
-    p = (UKBYTE *)m_macroMem + m_table[i].textOffset;
-    inLen = -1;
-    maxOutLen = sizeof(text);
-    ret = VnConvert(CONV_CHARSET_VNSTANDARD, CONV_CHARSET_UNIUTF8,
-		    p, (UKBYTE *)text,
-		    &inLen, &maxOutLen);
-    if (ret != 0)
-      continue;
-    if (i < m_count-1)
-      sprintf(line, "%s:%s\n", key, text);
-    else
-      sprintf(line, "%s:%s", key, text);
-    fputs(line, f);
-  }
+        p = (UKBYTE *)m_macroMem + m_table[i].textOffset;
+        inLen = -1;
+        maxOutLen = sizeof(text);
+        ret = VnConvert(CONV_CHARSET_VNSTANDARD, CONV_CHARSET_UNIUTF8, p, (UKBYTE *)text, &inLen, &maxOutLen);
+        if (ret != 0) {
+            continue;
+        }
+        if (i < m_count - 1) {
+            sprintf(line, "%s:%s\n", key, text);
+        } else {
+            sprintf(line, "%s:%s", key, text);
+        }
+        fputs(line, f);
+    }
 
-  fclose(f);
-  return 1;
+    fclose(f);
+    return 1;
 }
 
 //---------------------------------------------------------------
 int CMacroTable::addItem(const void *key, const void *text, int charset)
 {
-  int ret;
-  int inLen, maxOutLen;
-  int offset = m_occupied;
-  char *p = m_macroMem + offset;
+    int ret;
+    int inLen, maxOutLen;
+    int offset = m_occupied;
+    char *p = m_macroMem + offset;
 
-  if (m_count >= MAX_MACRO_ITEMS)
-    return -1;
-  
-  m_table[m_count].keyOffset = offset;
+    if (m_count >= MAX_MACRO_ITEMS) {
+        return -1;
+    }
 
-  // Convert macro key to VN standard
-  inLen = -1; //input is null-terminated
-  maxOutLen = MAX_MACRO_KEY_LEN * sizeof(StdVnChar);
-  if (maxOutLen + offset > m_memSize)
-    maxOutLen = m_memSize - offset;
-  ret = VnConvert(charset, CONV_CHARSET_VNSTANDARD, 
-		          (UKBYTE *)key, (UKBYTE *)p,
-		          &inLen, &maxOutLen);
-  if (ret != 0)
-    return -1;
+    m_table[m_count].keyOffset = offset;
 
-  offset += maxOutLen;
-  p += maxOutLen;
+    // Convert macro key to VN standard
+    inLen = -1; //input is null-terminated
+    maxOutLen = MAX_MACRO_KEY_LEN * sizeof(StdVnChar);
+    if (maxOutLen + offset > m_memSize) {
+        maxOutLen = m_memSize - offset;
+    }
+    ret = VnConvert(charset, CONV_CHARSET_VNSTANDARD, (UKBYTE *)key, (UKBYTE *)p, &inLen, &maxOutLen);
+    if (ret != 0) {
+        return -1;
+    }
 
-  //convert macro text to VN standard
-  m_table[m_count].textOffset = offset;
-  inLen = -1; //input is null-terminated
-  maxOutLen = MAX_MACRO_TEXT_LEN * sizeof(StdVnChar);
-  if (maxOutLen + offset > m_memSize)
-    maxOutLen = m_memSize - offset;
-  ret = VnConvert(charset, CONV_CHARSET_VNSTANDARD, 
-		  (UKBYTE *)text, (UKBYTE *)p,
-		  &inLen, &maxOutLen);
-  if (ret != 0)
-    return -1;
+    offset += maxOutLen;
+    p += maxOutLen;
 
-  m_occupied = offset + maxOutLen;
-  m_count++;
-  return (m_count-1);
+    //convert macro text to VN standard
+    m_table[m_count].textOffset = offset;
+    inLen = -1; //input is null-terminated
+    maxOutLen = MAX_MACRO_TEXT_LEN * sizeof(StdVnChar);
+    if (maxOutLen + offset > m_memSize) {
+        maxOutLen = m_memSize - offset;
+    }
+    ret = VnConvert(charset, CONV_CHARSET_VNSTANDARD, (UKBYTE *)text, (UKBYTE *)p, &inLen, &maxOutLen);
+    if (ret != 0) {
+        return -1;
+    }
+
+    m_occupied = offset + maxOutLen;
+    m_count++;
+    return (m_count - 1);
 }
 
 //---------------------------------------------------------------
@@ -309,29 +322,32 @@ int CMacroTable::addItem(const void *key, const void *text, int charset)
 //---------------------------------------------------------------
 int CMacroTable::addItem(const char *item, int charset)
 {
-  char key[MAX_MACRO_KEY_LEN];
-  
-  // Parse the input item
-  const char *pos = (char *) strchr(item, ':');
-  if (pos == NULL)
-    return -1;
-  int keyLen = (int)(pos - item);
-  if (keyLen > MAX_MACRO_KEY_LEN-1)
-    keyLen = MAX_MACRO_KEY_LEN-1;
-  strncpy(key, item, keyLen);
-  key[keyLen] = '\0';
-  return addItem(key, pos + 1, charset);
+    char key[MAX_MACRO_KEY_LEN];
+
+    // Parse the input item
+    const char *pos = (char *)strchr(item, ':');
+    if (pos == NULL) {
+        return -1;
+    }
+    int keyLen = (int)(pos - item);
+    if (keyLen > MAX_MACRO_KEY_LEN - 1) {
+        keyLen = MAX_MACRO_KEY_LEN - 1;
+    }
+    strncpy(key, item, keyLen);
+    key[keyLen] = '\0';
+    return addItem(key, pos + 1, charset);
 }
 
 //---------------------------------------------------------------
 void CMacroTable::resetContent()
 {
-  m_occupied = 0;
-  m_count = 0;
+    m_occupied = 0;
+    m_count = 0;
 }
 
 //---------------------------------------------------------------
-void CMacroTable::sortData() {
+void CMacroTable::sortData()
+{
     MacCompareStartMem = m_macroMem;
     qsort(m_table, m_count, sizeof(MacroDef), macCompare);
 }
@@ -339,15 +355,17 @@ void CMacroTable::sortData() {
 //---------------------------------------------------------------
 const StdVnChar *CMacroTable::getKey(int idx) const
 {
-    if (idx < 0 || idx >= m_count)
+    if (idx < 0 || idx >= m_count) {
         return 0;
-    return (StdVnChar *)(m_macroMem + m_table[idx].keyOffset);
+    }
+    return (StdVnChar * )(m_macroMem + m_table[idx].keyOffset);
 }
 
 //---------------------------------------------------------------
 const StdVnChar *CMacroTable::getText(int idx) const
 {
-    if (idx < 0 || idx >= m_count)
+    if (idx < 0 || idx >= m_count) {
         return 0;
-    return (StdVnChar *)(m_macroMem + m_table[idx].textOffset);
+    }
+    return (StdVnChar * )(m_macroMem + m_table[idx].textOffset);
 }

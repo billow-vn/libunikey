@@ -41,8 +41,8 @@
 
 struct MacroDef
 {
-  int keyOffset;
-  int textOffset;
+    int keyOffset;
+    int textOffset;
 };
 
 #if !defined(WIN32)
@@ -51,7 +51,7 @@ typedef char TCHAR;
 
 class DllInterface CMacroTable
 {
-public:
+    public:
     void init();
     int loadFromFile(const char *fname);
     int writeToFile(const char *fname);
@@ -59,14 +59,17 @@ public:
     const StdVnChar *lookup(StdVnChar *key);
     const StdVnChar *getKey(int idx) const;
     const StdVnChar *getText(int idx) const;
-    int getCount() const { return m_count; }
+    int getCount() const
+    {
+        return m_count;
+    }
     void resetContent();
     void sortData();
     int addItem(const char *item, int charset);
     int addItem(const void *key, const void *text, int charset);
 
-protected:
-    bool readHeader(FILE *f, int & version);
+    protected:
+    bool readHeader(FILE *f, int &version);
     void writeHeader(FILE *f);
 
     MacroDef m_table[MAX_MACRO_ITEMS];

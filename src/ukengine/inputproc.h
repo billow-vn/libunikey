@@ -40,69 +40,74 @@
     #define DllImport
 #endif
 
-enum UkKeyEvName {
-  vneRoofAll, vneRoof_a, vneRoof_e, vneRoof_o, 
-  vneHookAll, vneHook_uo, vneHook_u, vneHook_o, vneBowl, 
-  vneDd, 
-  vneTone0, vneTone1, vneTone2, vneTone3, vneTone4, vneTone5,
-  vne_telex_w, //special for telex
-  vneMapChar, //e.g. [ -> u+ , ] -> o+
-  vneEscChar,
-  vneNormal, //does not belong to any of the above categories
-  vneCount //just to count how many event types there are
+enum UkKeyEvName
+{
+    vneRoofAll, vneRoof_a, vneRoof_e, vneRoof_o,
+    vneHookAll, vneHook_uo, vneHook_u, vneHook_o, vneBowl,
+    vneDd,
+    vneTone0, vneTone1, vneTone2, vneTone3, vneTone4, vneTone5,
+    vne_telex_w, //special for telex
+    vneMapChar, //e.g. [ -> u+ , ] -> o+
+    vneEscChar,
+    vneNormal, //does not belong to any of the above categories
+    vneCount //just to count how many event types there are
 };
 
-enum UkCharType {
-  ukcVn,
-  ukcWordBreak, 
-  ukcNonVn, 
-  ukcReset
+enum UkCharType
+{
+    ukcVn,
+    ukcWordBreak,
+    ukcNonVn,
+    ukcReset
 };
 
-struct UkKeyEvent {
-  int evType;
-  UkCharType chType;
-  VnLexiName vnSym; //meaningful only when chType==ukcVn
-  unsigned int keyCode;
-  int tone; //meaningful only when this is a vowel
+struct UkKeyEvent
+{
+    int evType;
+    UkCharType chType;
+    VnLexiName vnSym; //meaningful only when chType==ukcVn
+    unsigned int keyCode;
+    int tone; //meaningful only when this is a vowel
 };
 
-struct UkKeyMapping {
+struct UkKeyMapping
+{
     unsigned char key;
     int action;
 };
 
 ///////////////////////////////////////////
-class UkInputProcessor {
+class UkInputProcessor
+{
 
-public:
-  //don't do anything with constructor, because
-  //this object can be allocated in shared memory
-  //Use init method instead
-  //UkInputProcessor();
-  
-  void init();
+    public:
+    //don't do anything with constructor, because
+    //this object can be allocated in shared memory
+    //Use init method instead
+    //UkInputProcessor();
 
-  UkInputMethod getIM()
-  {
-    return m_im;
-  }
+    void init();
 
-  void keyCodeToEvent(unsigned int keyCode, UkKeyEvent & ev);
-  void keyCodeToSymbol(unsigned int keyCode, UkKeyEvent & ev);
-  int setIM(UkInputMethod im);
-  int setIM(int map[256]);
-  void getKeyMap(int map[256]);
+    UkInputMethod getIM()
+    {
+        return m_im;
+    }
 
-  UkCharType getCharType(unsigned int keyCode);
+    void keyCodeToEvent(unsigned int keyCode, UkKeyEvent &ev);
+    void keyCodeToSymbol(unsigned int keyCode, UkKeyEvent &ev);
+    int setIM(UkInputMethod im);
+    int setIM(int map[256]);
+    void getKeyMap(int map[256]);
 
-protected:
-  static bool m_classInit;
+    UkCharType getCharType(unsigned int keyCode);
 
-  UkInputMethod m_im;
-  int m_keyMap[256];
+    protected:
+    static bool m_classInit;
 
-  void useBuiltIn(UkKeyMapping *map);
+    UkInputMethod m_im;
+    int m_keyMap[256];
+
+    void useBuiltIn(UkKeyMapping *map);
 
 };
 
@@ -118,7 +123,7 @@ DllInterface extern UkKeyMapping MsViMethodMapping[];
 extern VnLexiName IsoVnLexiMap[];
 inline VnLexiName IsoToVnLexi(unsigned int keyCode)
 {
-    return (keyCode >= 256)? vnl_nonVnChar : IsoVnLexiMap[keyCode];
+    return (keyCode >= 256) ? vnl_nonVnChar : IsoVnLexiMap[keyCode];
 }
 
 #endif

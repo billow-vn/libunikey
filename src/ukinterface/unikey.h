@@ -30,7 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     #endif /* End check Qt version */
 #endif /* End check exestance of Qt suitable version */
 
-
 #if !defined(__RE_OS_WINDOWS__) && !defined(__RE_OS_ANDROID__)
 /* OS not selected, try detect OS */
     #if (defined(WIN32) || defined(_WIN32) || defined(WIN32_LEAN_AND_MEAN) || defined(_WIN64) || defined(WIN64))
@@ -59,40 +58,38 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     #endif
 #endif
 
-
 #if defined(__cplusplus) || defined(_cplusplus)
     #define __RE_EXTERN__ extern "C"
 #else
     #define __RE_EXTERN__ extern
 #endif
 
-
 #if defined(__RE_OS_WINDOWS__) && !defined(HAVE_SUITABLE_QT_VERSION) && !defined(BKL_XUNIKEY_STATIC)
     #include <windows.h>
 
     #if defined(CMAKE_BUILD) || defined(__BUILDING_RECORE_DYNAMIC_LIBRARY__)
-        #	if defined(_MSC_VER) || defined(__RE_COMPILER_MINGW__)
-            #		define __RE_PUBLIC_CLASS_API__ __declspec(dllexport)
-            #		define __RE_EXPORT__ __RE_EXTERN__ __declspec(dllexport)
+        #if defined(_MSC_VER) || defined(__RE_COMPILER_MINGW__)
+            #define __RE_PUBLIC_CLASS_API__ __declspec(dllexport)
+            #define __RE_EXPORT__ __RE_EXTERN__ __declspec(dllexport)
         #	elif defined(__GNUC__)
-            #		define __RE_PUBLIC_CLASS_API__ __attribute__((dllexport))
-            #		define __RE_EXPORT__ __RE_EXTERN__ __attribute__((dllexport))
+            #define __RE_PUBLIC_CLASS_API__ __attribute__((dllexport))
+            #define __RE_EXPORT__ __RE_EXTERN__ __attribute__((dllexport))
         #	endif
     #else
-        #	if defined(_MSC_VER) || defined(__RE_COMPILER_MINGW__)
-            #		define __RE_PUBLIC_CLASS_API__ __declspec(dllimport)
-            #		define __RE_EXPORT__ __RE_EXTERN__ __declspec(dllimport)
+        #if defined(_MSC_VER) || defined(__RE_COMPILER_MINGW__)
+            #define __RE_PUBLIC_CLASS_API__ __declspec(dllimport)
+            #define __RE_EXPORT__ __RE_EXTERN__ __declspec(dllimport)
         #	elif defined(__GNUC__)
-            #		define __RE_PUBLIC_CLASS_API__ __attribute__((dllimport))
-            #		define __RE_EXPORT__ __RE_EXTERN__ __attribute__((dllimport))
+            #define __RE_PUBLIC_CLASS_API__ __attribute__((dllimport))
+            #define __RE_EXPORT__ __RE_EXTERN__ __attribute__((dllimport))
         #	endif
     #endif
 #endif /* __RE_OS_WINDOWS__ */
 
 #if defined(__GNUC__)
-    #	if __GNUC__ >= 4
-        #		if !defined(__RE_PUBLIC_CLASS_API__)
-            #			define __RE_PUBLIC_CLASS_API__ __attribute__ ((visibility("default")))
+    #if __GNUC__ >= 4
+        #if !defined(__RE_PUBLIC_CLASS_API__)
+            #define __RE_PUBLIC_CLASS_API__ __attribute__ ((visibility("default")))
         #		endif
     #	endif
 #endif
@@ -192,7 +189,7 @@ __RE_EXPORT__ int UnikeyLoadMacroTable(const char *fileName);
 __RE_EXPORT__ int UnikeyLoadUserKeyMap(const char *fileName);
 
 __RE_EXPORT__ bool UnikeyHasMacroInput();
-__RE_EXPORT__ void UnikeyMacroAddItem(const char * key, const char *text);
+__RE_EXPORT__ void UnikeyMacroAddItem(const char *key, const char *text);
 __RE_EXPORT__ void UnikeyMacroResetContent();
 __RE_EXPORT__ void UnikeyMacroSortData();
 

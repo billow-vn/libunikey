@@ -3,5 +3,5 @@
 
 int unikey_gtk_dummy()
 {
-  return 1;
+    return 1;
 }

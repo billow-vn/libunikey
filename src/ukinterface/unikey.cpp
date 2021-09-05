@@ -45,8 +45,9 @@ int UnikeyBufChars;
 UkOutputType UnikeyOutput;
 
 //--------------------------------------------
-bool UnikeyIsEnabled() {
-    bool flag = (bool) pShMem->vietKey;
+bool UnikeyIsEnabled()
+{
+    bool flag = (bool)pShMem->vietKey;
     if (flag) {
         switch (UnikeyGetInputMethod()) {
             case UkOff:
@@ -61,15 +62,17 @@ bool UnikeyIsEnabled() {
 }
 
 //--------------------------------------------
-bool UnikeyToggleIsEnabled() {
-    bool flag = !((bool) pShMem->vietKey);
+bool UnikeyToggleIsEnabled()
+{
+    bool flag = !((bool)pShMem->vietKey);
     pShMem->vietKey = flag;
 
     return flag;
 }
 
 //--------------------------------------------
-void UnikeySetInputMethod(UkInputMethod im) {
+void UnikeySetInputMethod(UkInputMethod im)
+{
     if (im == UkTelex || im == UkVni || im == UkSimpleTelex || im == UkSimpleTelex2) {
         pShMem->input.setIM(im);
         MyKbEngine.reset();
@@ -83,16 +86,17 @@ void UnikeySetInputMethod(UkInputMethod im) {
 }
 
 //--------------------------------------------
-UkInputMethod UnikeyGetInputMethod() {
+UkInputMethod UnikeyGetInputMethod()
+{
     return pShMem->input.getIM();
 }
 
 //--------------------------------------------
 void UnikeySetCapsState(int shiftPressed, int CapsLockOn)
 {
-  //UnikeyCapsAll = (shiftPressed && !CapsLockOn) || (!shiftPressed && CapsLockOn);
-  UnikeyCapsLockOn = CapsLockOn;
-  UnikeyShiftPressed = shiftPressed;
+    //UnikeyCapsAll = (shiftPressed && !CapsLockOn) || (!shiftPressed && CapsLockOn);
+    UnikeyCapsLockOn = CapsLockOn;
+    UnikeyShiftPressed = shiftPressed;
 }
 
 //--------------------------------------------
@@ -104,45 +108,46 @@ int UnikeySetOutputCharset(int charset)
 }
 
 //--------------------------------------------
-int UnikeyGetOutputCharset() {
+int UnikeyGetOutputCharset()
+{
     return pShMem->charsetId;
 }
 
 //--------------------------------------------
 void UnikeySetOptions(UnikeyOptions *pOpt)
 {
-  pShMem->options.freeMarking = pOpt->freeMarking;
-  pShMem->options.modernStyle = pOpt->modernStyle;
-  pShMem->options.macroEnabled = pOpt->macroEnabled;
-  pShMem->options.useUnicodeClipboard = pOpt->useUnicodeClipboard;
-  pShMem->options.alwaysMacro = pOpt->alwaysMacro;
-  pShMem->options.spellCheckEnabled = pOpt->spellCheckEnabled;
-  pShMem->options.autoNonVnRestore = pOpt->autoNonVnRestore;
+    pShMem->options.freeMarking = pOpt->freeMarking;
+    pShMem->options.modernStyle = pOpt->modernStyle;
+    pShMem->options.macroEnabled = pOpt->macroEnabled;
+    pShMem->options.useUnicodeClipboard = pOpt->useUnicodeClipboard;
+    pShMem->options.alwaysMacro = pOpt->alwaysMacro;
+    pShMem->options.spellCheckEnabled = pOpt->spellCheckEnabled;
+    pShMem->options.autoNonVnRestore = pOpt->autoNonVnRestore;
 }
 
 //--------------------------------------------
 void UnikeyGetOptions(UnikeyOptions *pOpt)
 {
-  *pOpt = pShMem->options;
+    *pOpt = pShMem->options;
 }
 
 //--------------------------------------------
 void CreateDefaultUnikeyOptions(UnikeyOptions *pOpt)
 {
-  pOpt->freeMarking = 1;
-  pOpt->modernStyle = 0;
-  pOpt->macroEnabled = 0;
-  pOpt->useUnicodeClipboard = 0;
-  pOpt->alwaysMacro = 0;
-  pOpt->spellCheckEnabled = 1;
-  pOpt->autoNonVnRestore = 0;
+    pOpt->freeMarking = 1;
+    pOpt->modernStyle = 0;
+    pOpt->macroEnabled = 0;
+    pOpt->useUnicodeClipboard = 0;
+    pOpt->alwaysMacro = 0;
+    pOpt->spellCheckEnabled = 1;
+    pOpt->autoNonVnRestore = 0;
 }
 
 //--------------------------------------------
 void UnikeyCheckKbCase(int *pShiftPressed, int *pCapsLockOn)
 {
-  *pShiftPressed = UnikeyShiftPressed;
-  *pCapsLockOn = UnikeyCapsLockOn;
+    *pShiftPressed = UnikeyShiftPressed;
+    *pCapsLockOn = UnikeyCapsLockOn;
 }
 
 //--------------------------------------------
@@ -173,78 +178,82 @@ void UnikeySetup()
 //--------------------------------------------
 void UnikeyCleanup()
 {
-  delete pShMem;
+    delete pShMem;
 }
 
 //--------------------------------------------
 void UnikeyFilter(unsigned int ch)
 {
-  UnikeyBufChars = sizeof(UnikeyBuf);
-  MyKbEngine.process(ch, UnikeyBackspaces, UnikeyBuf, UnikeyBufChars, UnikeyOutput);
+    UnikeyBufChars = sizeof(UnikeyBuf);
+    MyKbEngine.process(ch, UnikeyBackspaces, UnikeyBuf, UnikeyBufChars, UnikeyOutput);
 }
 
 //--------------------------------------------
 void UnikeyPutChar(unsigned int ch)
 {
-  MyKbEngine.pass(ch);
-  UnikeyBufChars = 0;
-  UnikeyBackspaces = 0;
+    MyKbEngine.pass(ch);
+    UnikeyBufChars = 0;
+    UnikeyBackspaces = 0;
 }
 
 //--------------------------------------------
 void UnikeyResetBuf()
 {
-  MyKbEngine.reset();
+    MyKbEngine.reset();
 }
 
 //--------------------------------------------
 void UnikeySetSingleMode()
 {
-  MyKbEngine.setSingleMode();
+    MyKbEngine.setSingleMode();
 }
 
 //--------------------------------------------
 void UnikeyBackspacePress()
 {
-  UnikeyBufChars = sizeof(UnikeyBuf);
-  MyKbEngine.processBackspace(UnikeyBackspaces, UnikeyBuf, UnikeyBufChars, UnikeyOutput);
-  //  printf("Backspaces: %d\n",UnikeyBackspaces);
+    UnikeyBufChars = sizeof(UnikeyBuf);
+    MyKbEngine.processBackspace(UnikeyBackspaces, UnikeyBuf, UnikeyBufChars, UnikeyOutput);
+    //  printf("Backspaces: %d\n",UnikeyBackspaces);
 }
 
 //--------------------------------------------
 int UnikeyLoadMacroTable(const char *fileName)
 {
-  return pShMem->macStore.loadFromFile(fileName);
+    return pShMem->macStore.loadFromFile(fileName);
 }
 
 //--------------------------------------------
 int UnikeyLoadUserKeyMap(const char *fileName)
 {
-  if (UkLoadKeyMap(fileName, pShMem->usrKeyMap)) {
-    //cout << "User key map loaded!\n"; //DEBUG
-    pShMem->usrKeyMapLoaded = 1;
-    return 1;
-  }
-  return 0;
+    if (UkLoadKeyMap(fileName, pShMem->usrKeyMap)) {
+        //cout << "User key map loaded!\n"; //DEBUG
+        pShMem->usrKeyMapLoaded = 1;
+        return 1;
+    }
+    return 0;
 }
 
 //--------------------------------------------
-bool UnikeyHasMacroInput() {
-    return (bool) MyKbEngine.hasMacroInput();
+bool UnikeyHasMacroInput()
+{
+    return (bool)MyKbEngine.hasMacroInput();
 }
 
 //--------------------------------------------
-void UnikeyMacroAddItem(const char *key, const char *text) {
+void UnikeyMacroAddItem(const char *key, const char *text)
+{
     pShMem->macStore.addItem(key, text, CONV_CHARSET_UNIUTF8);
 }
 
 //--------------------------------------------
-void UnikeyMacroResetContent() {
+void UnikeyMacroResetContent()
+{
     pShMem->macStore.resetContent();
 }
 
 //--------------------------------------------
-void UnikeyMacroSortData() {
+void UnikeyMacroSortData()
+{
     pShMem->macStore.sortData();
 }
 

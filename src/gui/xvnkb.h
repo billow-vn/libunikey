@@ -34,39 +34,39 @@
 
 // when ukxim is run in xvnkb sync mode, it will
 // use these atoms for synchronization
-#define VKP_CHARSET	"VK_CHARSET"
-#define VKP_METHOD	"VK_METHOD"
-#define VKP_USING		"VK_USING"
-#define VKP_SPELLING	"VK_SPELLING"
-#define VKP_HOTKEY	"VK_HOTKEY"
+#define VKP_CHARSET     "VK_CHARSET"
+#define VKP_METHOD      "VK_METHOD"
+#define VKP_USING       "VK_USING"
+#define VKP_SPELLING    "VK_SPELLING"
+#define VKP_HOTKEY      "VK_HOTKEY"
 
 
 // If we want to run both unikey and xvnkb core at
 // the same time, we must use a different set of 
 // atoms to avoid conflicts. (that also means no synchronization)
-#define UKP_CHARSET	"UK_CHARSET"
-#define UKP_METHOD	"UK_METHOD"
-#define UKP_USING		"UK_USING"
-#define UKP_SPELLING	"UK_SPELLING"
-#define UKP_HOTKEY	"UK_HOTKEY"
+#define UKP_CHARSET     "UK_CHARSET"
+#define UKP_METHOD      "UK_METHOD"
+#define UKP_USING       "UK_USING"
+#define UKP_SPELLING    "UK_SPELLING"
+#define UKP_HOTKEY      "UK_HOTKEY"
 
 
 typedef enum {
-  VKM_OFF,
-  VKM_VNI,
-  VKM_TELEX,
-  VKM_VIQR,
-  VKM_USER
+    VKM_OFF,
+    VKM_VNI,
+    VKM_TELEX,
+    VKM_VIQR,
+    VKM_USER
 } vk_methods;
 
 typedef enum {
-  VKC_TCVN,
-  VKC_VNI,
-  VKC_VIQR,
-  VKC_VISCII,
-  VKC_VPS,
-  VKC_UTF8,
-  VKC_BKHCM2
+    VKC_TCVN,
+    VKC_VNI,
+    VKC_VIQR,
+    VKC_VISCII,
+    VKC_VPS,
+    VKC_UTF8,
+    VKC_BKHCM2
 } vk_charsets;
 
 

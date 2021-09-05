@@ -24,6 +24,7 @@
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+
 using namespace std;
 
 #include <ctype.h>
@@ -75,7 +76,7 @@ UkEventLabelPair UkEvLabelList[] = {
     {"u+", vneCount + vnl_uh}
 };
 
-const int UkEvLabelCount = sizeof(UkEvLabelList)/sizeof(UkEventLabelPair);
+const int UkEvLabelCount = sizeof(UkEvLabelList) / sizeof(UkEventLabelPair);
 
 //--------------------------------------------------
 static int parseNameValue(char *line, char **name, char **value)
@@ -83,43 +84,53 @@ static int parseNameValue(char *line, char **name, char **value)
     char *p, *mark;
     char ch;
 
-    if (line == 0)
+    if (line == 0) {
         return 0;
+    }
 
     // get rid of comment
     p = strchr(line, OPT_COMMENT_CHAR);
-    if (p)
+    if (p) {
         *p = 0;
+    }
 
     //get option name
-    for (p=line; *p == ' '; p++);
-    if (*p == 0)
+    for (p = line; *p == ' '; p++) {
+    }
+    if (*p == 0) {
         return 0;
+    }
 
     *name = p;
     mark = p; //mark the last non-space character
     p++;
-    while ((ch=*p) != '=' && ch!=0) {
-        if (ch != ' ')
+    while ((ch = *p) != '=' && ch != 0) {
+        if (ch != ' ') {
             mark = p;
+        }
         p++;
     }
 
-    if (ch == 0)
+    if (ch == 0) {
         return 0;
-    *(mark+1) = 0; //terminate name with a null character
+    }
+    *(mark + 1) = 0; //terminate name with a null character
 
     //get option value
     p++;
-    while (*p == ' ') p++;
-    if (*p == 0)
+    while (*p == ' ') {
+        p++;
+    }
+    if (*p == 0) {
         return 0;
+    }
 
     *value = p;
     mark = p;
     while (*p) { //strip trailing spaces
-        if (*p != ' ')
+        if (*p != ' ') {
             mark = p;
+        }
         p++;
     }
     *++mark = 0;
@@ -131,11 +142,12 @@ DllExport int UkLoadKeyMap(const char *fileName, int keyMap[256])
 {
     int i, mapCount;
     UkKeyMapPair orderMap[256];
-    if (!UkLoadKeyOrderMap(fileName, orderMap, &mapCount))
+    if (!UkLoadKeyOrderMap(fileName, orderMap, &mapCount)) {
         return 0;
+    }
 
     initKeyMap(keyMap);
-    for (i=0; i < mapCount; i++) {
+    for (i = 0; i < mapCount; i++) {
         keyMap[orderMap[i].key] = orderMap[i].action;
         if (orderMap[i].action < vneCount) {
             keyMap[tolower(orderMap[i].key)] = orderMap[i].action;
@@ -169,18 +181,21 @@ DllExport int UkLoadKeyOrderMap(const char *fileName, UkKeyMapPair *pMap, int *p
     lineCount = 0;
     mapCount = 0;
     while (!feof(f)) {
-        if (fgets((char *)buf, bufSize, f) == 0)
+        if (fgets((char *)buf, bufSize, f) == 0) {
             break;
+        }
         lineCount++;
         len = strlen(buf);
-        if (len == 0)
+        if (len == 0) {
             break;
+        }
 
-        if (buf[len-1] == '\n')
-            buf[len-1] = 0;
+        if (buf[len - 1] == '\n') {
+            buf[len - 1] = 0;
+        }
         if (parseNameValue(buf, (char **)&name, (char **)&value)) {
             if (strlen(name) == 1) {
-                for (i=0; i < UkEvLabelCount; i++) {
+                for (i = 0; i < UkEvLabelCount; i++) {
                     if (strcmp(UkEvLabelList[i].label, value) == 0) {
                         c = (unsigned char)name[0];
                         if (keyMap[c] != vneNormal) {
@@ -193,8 +208,7 @@ DllExport int UkLoadKeyOrderMap(const char *fileName, UkKeyMapPair *pMap, int *p
                         if (keyMap[c] < vneCount) {
                             pMap[mapCount].key = toupper(c);
                             keyMap[toupper(c)] = UkEvLabelList[i].ev;
-                        }
-                        else {
+                        } else {
                             pMap[mapCount].key = c;
                         }
                         mapCount++;
@@ -204,14 +218,12 @@ DllExport int UkLoadKeyOrderMap(const char *fileName, UkKeyMapPair *pMap, int *p
                 if (i == UkEvLabelCount) {
                     cerr << "Error in user key layout, line " << lineCount << ": command not found" << endl;
                 }
-            }
-            else {
-                cerr << "Error in user key layout, line " << lineCount 
-                     << ": key name is not a single character" << endl;	
+            } else {
+                cerr << "Error in user key layout, line " << lineCount << ": key name is not a single character" << endl;
             }
         }
     }
-    delete [] buf;
+    delete[] buf;
     fclose(f);
 
     *pMapCount = mapCount;
@@ -223,12 +235,12 @@ DllExport int UkLoadKeyOrderMap(const char *fileName, UkKeyMapPair *pMap, int *p
 void initKeyMap(int keyMap[256])
 {
     unsigned int c;
-    for (c=0; c<256; c++)
+    for (c = 0; c < 256; c++) {
         keyMap[c] = vneNormal;
+    }
 }
 
-const char *UkKeyMapHeader =
-    "; This is UniKey user-defined key mapping file, generated from UniKey (Windows)\n\n";
+const char *UkKeyMapHeader = "; This is UniKey user-defined key mapping file, generated from UniKey (Windows)\n\n";
 
 DllExport int UkStoreKeyOrderMap(const char *fileName, UkKeyMapPair *pMap, int mapCount)
 {
@@ -244,7 +256,7 @@ DllExport int UkStoreKeyOrderMap(const char *fileName, UkKeyMapPair *pMap, int m
     }
 
     fputs(UkKeyMapHeader, f);
-    for (i=0; i < mapCount; i++) {
+    for (i = 0; i < mapCount; i++) {
         labelIndex = getLabelIndex(pMap[i].action);
         if (labelIndex != -1) {
             sprintf(line, "%c = %s\n", pMap[i].key, UkEvLabelList[labelIndex].label);
@@ -259,8 +271,9 @@ int getLabelIndex(int event)
 {
     int i;
     for (i = 0; i < UkEvLabelCount; i++) {
-        if (UkEvLabelList[i].ev == event)
+        if (UkEvLabelList[i].ev == event) {
             return i;
+        }
     }
     return -1;
 }

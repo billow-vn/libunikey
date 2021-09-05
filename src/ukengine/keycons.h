@@ -62,7 +62,8 @@ typedef enum {
 
 typedef struct _UnikeyOptions UnikeyOptions;
 
-struct _UnikeyOptions {
+struct _UnikeyOptions
+{
     int freeMarking;
     int modernStyle;
     int macroEnabled;
@@ -83,7 +84,7 @@ struct _UnikeyOptions {
 #define UKOPT_FLAG_ALWAYS_MACRO          0x00000020
 #define UKOPT_FLAG_STRICT_SPELL          0x00000040
 #define UKOPT_FLAG_USE_IME               0x00000080
-#define UKOPT_FLAG_SPELLCHECK_ENABLED   0x00000100
+#define UKOPT_FLAG_SPELLCHECK_ENABLED    0x00000100
 
 #if defined(WIN32)
 typedef struct _UnikeySysInfo UnikeySysInfo;
@@ -100,7 +101,8 @@ struct _UnikeySysInfo
 };
 #endif
 
-typedef enum {
+typedef enum
+{
     UkCharOutput, UkKeyOutput
 } UkOutputType;
 #endif
