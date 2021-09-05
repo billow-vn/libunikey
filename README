@@ -6,6 +6,8 @@ This package contains following components:
 - ukxim: Unikey XIM (X Input Method) server
 - unikey: GUI for ukxim and unikey-gtk
 - unikey-gtk: GTK vietnamese input method module
+- objc: Lib for Objective-C
+- XUnikey.podspec: Add XUnikey pod library
 
 To install: see INSTALL
 Manual: see doc/manual
